@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Compose Email";
+}
+<h1 class="display-5">@ViewData["Title"]</h1>
+
+@using (Html.BeginForm())
+{
+    @if (!ViewData.ModelState.IsValid)
+    {
+        @Html.ValidationSummary(false, "Please correct the following errors:", new { @class = "text-danger" })
+    }
+
+    <div class="mb-3">
+
+        <h3>Recipients</h3>
+
+
+    </div>
+
+    <div class="mb-3">
+        
+        <h3>Body</h3>
+
+
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Next</button>
+}
