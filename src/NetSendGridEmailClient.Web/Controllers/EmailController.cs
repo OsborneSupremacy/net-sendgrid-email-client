@@ -1,13 +1,11 @@
-﻿using System.Diagnostics;
-using Google.Apis.Auth.AspNetCore3;
-using Microsoft.AspNetCore.Authentication;
+﻿using Google.Apis.Auth.AspNetCore3;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NetSendGridEmailClient.Web.Models;
 
 namespace NetSendGridEmailClient.Web.Controllers;
 
 [GoogleScopedAuthorize]
-
+[Authorize(Policy = "Admin")]
 public class EmailController : Controller
 {
     private readonly ILogger<HomeController> _logger;

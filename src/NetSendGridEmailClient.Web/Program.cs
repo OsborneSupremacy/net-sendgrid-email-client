@@ -1,8 +1,11 @@
 ﻿using Google.Apis.Auth.AspNetCore3;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using NetSendGridEmailClient.Web.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
+
+configuration.AddUserSecrets<Program>(true);
 
 // get azure config service info
 var azureConfigConnectionString = Environment
@@ -34,6 +37,15 @@ builder.Services
         googleOptions.ClientSecret = configuration["Authentication:Google:ClientSecret"];
         googleOptions.SignedOutCallbackPath = "/Home/SignedOut";
     });
+
+AuthorizationSettings authorizationSettings = new();
+configuration.GetSection("Authorization").Bind(authorizationSettings);
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Admin",
+        policy => policy.RequireClaim(System.Security.Claims.ClaimTypes.Email, authorizationSettings.Admins));
+});
 
 var app = builder.Build();
 
