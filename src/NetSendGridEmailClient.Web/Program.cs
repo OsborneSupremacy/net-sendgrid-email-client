@@ -47,6 +47,10 @@ builder.Services.AddAuthorization(options =>
         policy => policy.RequireClaim(System.Security.Claims.ClaimTypes.Email, authorizationSettings.Admins));
 });
 
+SendGridSettings sendGridSettings = new();
+configuration.GetSection("SendGrid").Bind(sendGridSettings);
+builder.Services.AddSingleton(sendGridSettings);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
