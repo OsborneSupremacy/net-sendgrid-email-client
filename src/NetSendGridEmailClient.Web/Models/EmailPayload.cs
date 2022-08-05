@@ -18,7 +18,6 @@ public record EmailPayload
     [Display(Name = "CC")]
     public IList<string> Cc { get; set; } = default!;
 
-
     [Display(Name = "BCC")]
     public IList<string> Bcc { get; set; } = default!;
 }

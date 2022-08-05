@@ -13,12 +13,17 @@ public class EmailController : Controller
 
     private readonly SendGridSettings _sendGridSettings;
 
+    private readonly EmailPayloadValidator _emailPayloadValidator;
+
     public EmailController(
         ILogger<HomeController> logger,
-        SendGridSettings sendGridSettings)
+        SendGridSettings sendGridSettings,
+        EmailPayloadValidator emailPayloadValidator
+        )
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _sendGridSettings = sendGridSettings ?? throw new ArgumentNullException(nameof(sendGridSettings));
+        _emailPayloadValidator = emailPayloadValidator ?? throw new ArgumentNullException(nameof(emailPayloadValidator));
     }
 
     public IActionResult Index()
@@ -32,6 +37,15 @@ public class EmailController : Controller
             FromDomain = _sendGridSettings.Domain,
             Body = string.Empty
         };
+
+        return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Index(EmailPayload model)
+    {
+
+
 
         return View(model);
     }

@@ -15,7 +15,7 @@
     <div class="mb-3">
         @Html.LabelFor(model => model.FromName, new { @class="form-label" })
         <div class="input-group mb-3">
-            @Html.TextBoxFor(model => model.FromName, new { @class="form-control" })
+            @Html.TextBoxFor(model => model.FromName, new { @class="form-control", placeholder="From" })
             <span class="input-group-text" >@@@Model.FromDomain</span>
         </div>
     </div>
@@ -28,7 +28,7 @@
             @for(int x = 0; x <= Model.To.Count - 1; x++)
             {
                 <div class="input-group mb-3">
-                    <input type="email" class="form-control" data-recipientType="To" id="To[@x]" name="To" />
+                    <input type="email" value="@Model.To[x]" class="form-control" data-recipientType="To" id="To[@x]" name="To" placeholder="To" />
                 </div>
             }
         </div>
@@ -43,15 +43,21 @@
     </div>
 
     <div class="mb-3">
-        
-        <h3>Body</h3>
 
+        @Html.LabelFor(model => model.Body, new { @class="form-label" })
+
+        @Html.TextAreaFor(model => model.Body,
+            new {
+                @class = "form-control",
+                rows = 10,
+                placeholder = "Message Body"
+            }
+        )
 
     </div>
 
     @Html.HiddenFor(model => model.FromDomain);
 
     <button type="submit" class="btn btn-primary">Next</button>
-
 }
 

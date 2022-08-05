@@ -12,8 +12,9 @@ function addRecipientField(recipientType: string) {
     newInput.setAttribute('type', 'email');
     newInput.setAttribute('class', 'form-control');
     newInput.setAttribute('data-recipientType', recipientType);
-    newInput.setAttribute('id', recipientType + `[${newIndex}]`);
+    newInput.setAttribute('id', recipientType + `[${newIndex}]`); // might not need this
     newInput.setAttribute('name', recipientType);
+    newInput.setAttribute('placeholder', recipientType);
 
     newDiv.appendChild(newInput);
 

@@ -8,8 +8,9 @@ function addRecipientField(recipientType) {
     newInput.setAttribute('type', 'email');
     newInput.setAttribute('class', 'form-control');
     newInput.setAttribute('data-recipientType', recipientType);
-    newInput.setAttribute('id', recipientType + "[".concat(newIndex, "]"));
+    newInput.setAttribute('id', recipientType + "[".concat(newIndex, "]")); // might not need this
     newInput.setAttribute('name', recipientType);
+    newInput.setAttribute('placeholder', recipientType);
     newDiv.appendChild(newInput);
     document
         .querySelector("div[data-recipientType=\"".concat(recipientType, "\"]"))

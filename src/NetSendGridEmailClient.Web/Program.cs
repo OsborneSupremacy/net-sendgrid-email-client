@@ -1,6 +1,7 @@
 ﻿using Google.Apis.Auth.AspNetCore3;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using NetSendGridEmailClient.Web.Models;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -16,6 +17,7 @@ if (!string.IsNullOrWhiteSpace(azureConfigConnectionString))
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddValidatorsFromAssemblyContaining<EmailPayloadValidator>();
 
 builder.Services
     .AddAuthentication(o =>
