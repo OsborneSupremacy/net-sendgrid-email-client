@@ -1,6 +1,7 @@
 ﻿using Google.Apis.Auth.AspNetCore3;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NetSendGridEmailClient.Functions;
 using NetSendGridEmailClient.Web.Models;
 
 namespace NetSendGridEmailClient.Web.Controllers;
@@ -44,6 +45,13 @@ public class EmailController : Controller
     [HttpPost]
     public async Task<IActionResult> Index(EmailPayload model)
     {
+        _emailPayloadValidator
+            .Validate(model)
+            .AddToModelState(ModelState);
+
+        if (!ModelState.IsValid)
+            return View(model);
+
 
 
 

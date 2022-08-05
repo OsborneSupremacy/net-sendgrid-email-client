@@ -30,8 +30,9 @@ public class EmailPayloadValidator : AbstractValidator<EmailPayload>
         RuleFor(x => x.Body).NotEmpty();
 
         RuleFor(x => x.To).Must(x => x.Any());
-
+        RuleForEach(x => x.To).NotEmpty();
         RuleForEach(x => x.To).EmailAddress();
+
         RuleForEach(x => x.Cc).EmailAddress();
         RuleForEach(x => x.Bcc).EmailAddress();
     }

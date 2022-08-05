@@ -17,7 +17,8 @@ function addRecipientField(recipientType) {
         .appendChild(newDiv);
 }
 function removeRecipientField(recipientType) {
-    var fields = document.querySelectorAll("input[data-recipientType=\"".concat(recipientType, "\"]"));
+    var fields = document
+        .querySelectorAll("input[data-recipientType=\"".concat(recipientType, "\"]"));
     // don't let all fields be removed
     if (fields.length === 1)
         return;

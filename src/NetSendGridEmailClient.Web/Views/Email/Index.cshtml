@@ -20,6 +20,7 @@
         </div>
     </div>
 
+    @*to*@
     <div class="mb-3">
 
         @Html.LabelFor(model => model.To, new { @class="form-label" })
@@ -34,9 +35,55 @@
         </div>
 
         <div class="mb-3">
-            <div class="btn-group" role="group" aria-label="Basic example">
+            <div class="btn-group" role="group">
               <button type="button" title="Add a Recipient" class="btn btn-info" onclick="addRecipientField('To');">+</button>
               <button type="button" title="Remove a Recipient" class="btn btn-warning" onclick="removeRecipientField('To');">-</button>
+            </div>
+        </div>
+
+    </div>
+
+    @*cc*@
+    <div class="mb-3">
+
+        @Html.LabelFor(model => model.Cc, new { @class="form-label" })
+
+        <div data-recipientType="Cc">
+            @for(int x = 0; x <= Model.Cc.Count - 1; x++)
+            {
+                <div class="input-group mb-3">
+                    <input type="email" value="@Model.Cc[x]" class="form-control" data-recipientType="Cc" id="Cc[@x]" name="Cc" placeholder="Cc" />
+                </div>
+            }
+        </div>
+
+        <div class="mb-3">
+            <div class="btn-group" role="group">
+              <button type="button" title="Add a Recipient" class="btn btn-info" onclick="addRecipientField('Cc');">+</button>
+              <button type="button" title="Remove a Recipient" class="btn btn-warning" onclick="removeRecipientField('Cc');">-</button>
+            </div>
+        </div>
+
+    </div>
+
+    @*bcc*@
+    <div class="mb-3">
+
+        @Html.LabelFor(model => model.Bcc, new { @class="form-label" })
+
+        <div data-recipientType="Bcc">
+            @for(int x = 0; x <= Model.Bcc.Count - 1; x++)
+            {
+                <div class="input-group mb-3">
+                    <input type="email" value="@Model.Bcc[x]" class="form-control" data-recipientType="Bcc" id="Bcc[@x]" name="Bcc" placeholder="Bcc" />
+                </div>
+            }
+        </div>
+
+        <div class="mb-3">
+            <div class="btn-group" role="group">
+              <button type="button" title="Add a Recipient" class="btn btn-info" onclick="addRecipientField('Bcc');">+</button>
+              <button type="button" title="Remove a Recipient" class="btn btn-warning" onclick="removeRecipientField('Bcc');">-</button>
             </div>
         </div>
 

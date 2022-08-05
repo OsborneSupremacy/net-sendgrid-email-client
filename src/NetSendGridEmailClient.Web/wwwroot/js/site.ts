@@ -25,7 +25,8 @@ function addRecipientField(recipientType: string) {
 
 function removeRecipientField(recipientType: string) {
 
-    let fields = document.querySelectorAll(`input[data-recipientType="${recipientType}"]`);
+    let fields = document
+        .querySelectorAll(`input[data-recipientType="${recipientType}"]`);
 
     // don't let all fields be removed
     if (fields.length === 1) return;
