@@ -28,15 +28,15 @@
             @for(int x = 0; x <= Model.To.Count - 1; x++)
             {
                 <div class="input-group mb-3">
-                    <input type="email" class="form-control" data-recipientType="To" data-index="@x" id="To[@x]" name="To" />
+                    <input type="email" class="form-control" data-recipientType="To" id="To[@x]" name="To" />
                 </div>
             }
         </div>
 
         <div class="mb-3">
             <div class="btn-group" role="group" aria-label="Basic example">
-              <button type="button" title="Add a Recipient" class="btn btn-info" onclick="addField('To');">+</button>
-              <button type="button" title="Remove a Recipient" class="btn btn-warning">-</button>
+              <button type="button" title="Add a Recipient" class="btn btn-info" onclick="addRecipientField('To');">+</button>
+              <button type="button" title="Remove a Recipient" class="btn btn-warning" onclick="removeRecipientField('To');">-</button>
             </div>
         </div>
 
@@ -55,27 +55,3 @@
 
 }
 
-<script type="text/javascript">
-    function addField(recipientType) {
-
-        let fields = document.querySelectorAll('input[data-recipientType="' + recipientType + '"]');
-
-        let newIndex = fields.length + 1;
-
-        let target = document.querySelector('div[data-recipientType="' + recipientType + '"]');
-
-        let newDiv = document.createElement('div');
-        newDiv.setAttribute('class', 'input-group mb-3');
-
-        let newInput = document.createElement('input');
-        newInput.setAttribute('type', 'email');
-        newInput.setAttribute('class', 'form-control');
-        newInput.setAttribute('data-recipientType', newIndex);
-        newInput.setAttribute('data-index', newIndex);
-        newInput.setAttribute('id', recipientType + `[${newIndex}]`);
-        newInput.setAttribute('name', recipientType);
-
-        newDiv.appendChild(newInput);
-        target.appendChild(newDiv);
-    }
-</script>
