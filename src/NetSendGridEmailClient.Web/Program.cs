@@ -52,6 +52,8 @@ SendGridSettings sendGridSettings = new();
 configuration.GetSection("SendGrid").Bind(sendGridSettings);
 builder.Services.AddSingleton(sendGridSettings);
 
+builder.Services.AddScoped<SendGridEmailService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

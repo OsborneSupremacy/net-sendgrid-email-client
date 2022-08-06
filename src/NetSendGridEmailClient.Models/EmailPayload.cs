@@ -14,7 +14,7 @@ public record EmailPayload
     [Display(Name = "From")]
     public string FromAddress => $"{FromName}@{FromDomain}";
 
-    public string Subject { get; set; } = default!;
+    public string? Subject { get; set; } = default!;
 
     public string Body { get; set; } = default!;
 

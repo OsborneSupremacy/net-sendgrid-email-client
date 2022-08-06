@@ -7,8 +7,6 @@ namespace NetSendGridEmailClient.Services;
 
 public class SendGridEmailService
 {
-    private readonly string _apiKey = string.Empty;
-
     private readonly SendGridSettings _settings;
 
     public SendGridEmailService(
@@ -23,7 +21,7 @@ public class SendGridEmailService
         SendGridMessage msg = new()
         {
             From = emailPayload.FromAddress.ToEmail(),
-            Subject = emailPayload.Subject,
+            Subject = emailPayload.Subject ?? string.Empty,
             HtmlContent = emailPayload.HtmlBody
         };
 
@@ -31,7 +29,7 @@ public class SendGridEmailService
         msg.AddCcs(emailPayload.Cc.ToEmailList());
         msg.AddBccs(emailPayload.Bcc.ToEmailList());
 
-        var response = await new SendGridClient(_apiKey)
+        var response = await new SendGridClient(_settings.ApiKey)
             .SendEmailAsync(msg);
 
         if (response.IsSuccessStatusCode)
