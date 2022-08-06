@@ -7,9 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="11.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
     <PackageReference Include="SendGrid" Version="9.28.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NetSendGridEmailClient.Functions\NetSendGridEmailClient.Functions.csproj" />
+    <ProjectReference Include="..\NetSendGridEmailClient.Models\NetSendGridEmailClient.Models.csproj" />
   </ItemGroup>
 
 </Project>

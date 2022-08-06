@@ -1,4 +1,4 @@
-﻿namespace NetSendGridEmailClient.Web.Models;
+﻿namespace NetSendGridEmailClient.Models;
 
 public record AuthorizationSettings
 {

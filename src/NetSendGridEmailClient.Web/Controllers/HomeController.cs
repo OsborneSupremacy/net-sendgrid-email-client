@@ -2,7 +2,6 @@
 using Google.Apis.Auth.AspNetCore3;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using NetSendGridEmailClient.Web.Models;
 
 namespace NetSendGridEmailClient.Web.Controllers;
 

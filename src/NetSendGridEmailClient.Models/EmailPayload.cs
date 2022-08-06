@@ -2,7 +2,7 @@
 using FluentValidation;
 using Markdig;
 
-namespace NetSendGridEmailClient.Web.Models;
+namespace NetSendGridEmailClient.Models;
 
 public record EmailPayload
 {
@@ -13,6 +13,8 @@ public record EmailPayload
 
     [Display(Name = "From")]
     public string FromAddress => $"{FromName}@{FromDomain}";
+
+    public string Subject { get; set; } = default!;
 
     public string Body { get; set; } = default!;
 
