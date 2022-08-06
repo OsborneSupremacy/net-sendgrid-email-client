@@ -43,15 +43,19 @@ public class EmailController : Controller
     }
 
     [HttpPost]
-    public IActionResult Index(EmailPayload model)
+    public IActionResult Compose(EmailPayload model) =>
+        View("Index", model);
+
+    [HttpPost]
+    public IActionResult Confirm(EmailPayload model)
     {
         _emailPayloadValidator
             .Validate(model)
             .AddToModelState(ModelState);
 
         if (!ModelState.IsValid)
-            return View(model);
+            return View("Index", model);
 
-        return View("Confirm", model);
+        return View(model);
     }
 }

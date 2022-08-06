@@ -23,7 +23,7 @@ public record EmailPayload
             var pipeline = new MarkdownPipelineBuilder()
                 .UseAdvancedExtensions()
                 .Build();
-            return Markdown.ToHtml(Body, pipeline);
+            return Markdown.ToHtml(Body ?? string.Empty, pipeline);
         }
     }
 
