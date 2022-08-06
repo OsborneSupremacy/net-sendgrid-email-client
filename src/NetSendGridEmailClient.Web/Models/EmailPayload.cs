@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using FluentValidation;
+using Markdig;
 
 namespace NetSendGridEmailClient.Web.Models;
 
@@ -14,6 +15,17 @@ public record EmailPayload
     public string FromAddress => $"{FromName}@{FromDomain}";
 
     public string Body { get; set; } = default!;
+
+    public string HtmlBody
+    {
+        get
+        {
+            var pipeline = new MarkdownPipelineBuilder()
+                .UseAdvancedExtensions()
+                .Build();
+            return Markdown.ToHtml(Body, pipeline);
+        }
+    }
 
     [Display(Name = "To")]
     public IList<string> To { get; set; } = default!;
