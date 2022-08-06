@@ -26,8 +26,10 @@ public class SendGridEmailService
         };
 
         msg.AddTos(emailPayload.To.ToEmailList());
-        msg.AddCcs(emailPayload.Cc.ToEmailList());
-        msg.AddBccs(emailPayload.Bcc.ToEmailList());
+        if(emailPayload.Cc.AnyEmails())
+            msg.AddCcs(emailPayload.Cc.ToEmailList());
+        if(emailPayload.Bcc.AnyEmails())
+            msg.AddBccs(emailPayload.Bcc.ToEmailList());
 
         var response = await new SendGridClient(_settings.ApiKey)
             .SendEmailAsync(msg);
