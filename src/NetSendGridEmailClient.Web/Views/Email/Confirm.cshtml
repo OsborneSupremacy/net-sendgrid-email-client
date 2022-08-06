@@ -15,7 +15,7 @@
 <div class="mb-3 row">
     @Html.LabelFor(model => model.To, new { @class="col-sm-2 col-form-label" })
     <div class="col-sm-10">
-        <input type="text" readonly class="form-control-plaintext" value="@String.Join(", ", Model.To.ToArray())">
+        <input type="text" readonly class="form-control-plaintext" value="@string.Join(", ", Model.To.ToArray())">
     </div>
 </div>
 
@@ -24,17 +24,17 @@
     <div class="mb-3 row">
         @Html.LabelFor(model => model.Cc, new { @class="col-sm-2 col-form-label" })
         <div class="col-sm-10">
-            <input type="text" readonly class="form-control-plaintext" value="@String.Join(", ", Model.Cc.ToArray())">
+            <input type="text" readonly class="form-control-plaintext" value="@string.Join(", ", Model.Cc.ToArray())">
         </div>
     </div>
 }
 
-@if(Model.Cc.Any(x => !string.IsNullOrWhiteSpace(x)))
+@if(Model.Bcc.Any(x => !string.IsNullOrWhiteSpace(x)))
 {
     <div class="mb-3 row">
         @Html.LabelFor(model => model.Bcc, new { @class="col-sm-2 col-form-label" })
         <div class="col-sm-10">
-            <input type="text" readonly class="form-control-plaintext" value="@String.Join(", ", Model.Bcc.ToArray())">
+            <input type="text" readonly class="form-control-plaintext" value="@string.Join(", ", Model.Bcc.ToArray())">
         </div>
     </div>
 }

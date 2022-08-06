@@ -5,7 +5,7 @@ namespace NetSendGridEmailClient.Web.Models;
 
 public record EmailPayload
 {
-    [Display(Name="From")]
+    [Display(Name = "From")]
     public string FromName { get; set; } = default!;
 
     public string FromDomain { get; set; } = default!;
