@@ -1,0 +1,53 @@
+﻿@model EmailPayload
+
+@{
+    ViewData["Title"] = "Confirm Send";
+}
+<h1 class="display-5">@ViewData["Title"]</h1>
+
+<div class="mb-3 row">
+    @Html.LabelFor(model => model.FromAddress, new { @class="col-sm-2 col-form-label" })
+    <div class="col-sm-10">
+        @Html.DisplayFor(model => model.FromAddress, new { @readonly="true", @class="form-control-plaintext" } )
+    </div>
+</div>
+
+<div class="mb-3 row">
+    @Html.LabelFor(model => model.To, new { @class="col-sm-2 col-form-label" })
+    <div class="col-sm-10">
+        <input type="text" readonly class="form-control-plaintext" value="@String.Join(", ", Model.To.ToArray())">
+    </div>
+</div>
+
+@if(Model.Cc.Any(x => !string.IsNullOrWhiteSpace(x)))
+{
+    <div class="mb-3 row">
+        @Html.LabelFor(model => model.Cc, new { @class="col-sm-2 col-form-label" })
+        <div class="col-sm-10">
+            <input type="text" readonly class="form-control-plaintext" value="@String.Join(", ", Model.Cc.ToArray())">
+        </div>
+    </div>
+}
+
+@if(Model.Cc.Any(x => !string.IsNullOrWhiteSpace(x)))
+{
+    <div class="mb-3 row">
+        @Html.LabelFor(model => model.Bcc, new { @class="col-sm-2 col-form-label" })
+        <div class="col-sm-10">
+            <input type="text" readonly class="form-control-plaintext" value="@String.Join(", ", Model.Bcc.ToArray())">
+        </div>
+    </div>
+}
+
+<div class="mb-3 row">
+
+    @Html.LabelFor(model => model.Body, new { @class="col-sm-2 col-form-label" })
+
+    <div class="col-sm-10">
+        @Html.DisplayFor(model => model.Body)
+    </div>
+
+</div>
+
+<button type="submit" class="btn btn-primary btn-lg">Send</button>
+<button type="submit" class="btn btn-info btn-sm">Edit</button>

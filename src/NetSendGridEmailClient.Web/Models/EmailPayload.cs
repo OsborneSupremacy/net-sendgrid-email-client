@@ -10,6 +10,9 @@ public record EmailPayload
 
     public string FromDomain { get; set; } = default!;
 
+    [Display(Name = "From")]
+    public string FromAddress => $"{FromName}@{FromDomain}";
+
     public string Body { get; set; } = default!;
 
     [Display(Name = "To")]

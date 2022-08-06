@@ -43,7 +43,7 @@ public class EmailController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Index(EmailPayload model)
+    public IActionResult Index(EmailPayload model)
     {
         _emailPayloadValidator
             .Validate(model)
@@ -52,10 +52,6 @@ public class EmailController : Controller
         if (!ModelState.IsValid)
             return View(model);
 
-
-
-
-        return View(model);
+        return View("Confirm", model);
     }
-
 }
