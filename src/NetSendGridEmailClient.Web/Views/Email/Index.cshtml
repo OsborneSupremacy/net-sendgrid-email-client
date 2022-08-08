@@ -7,6 +7,8 @@
 
 @using (Html.BeginForm())
 {
+    @Html.AntiForgeryToken()
+
     @if (!ViewData.ModelState.IsValid)
     {
         @Html.ValidationSummary(false, "Please correct the following errors:", new { @class = "text-danger" })

@@ -45,10 +45,12 @@ public class EmailController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public IActionResult Compose(EmailPayload model) =>
         View("Index", model);
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public IActionResult Confirm(EmailPayload model)
     {
         _emailPayloadValidator
@@ -62,6 +64,7 @@ public class EmailController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Send(EmailPayload model)
     {
         _emailPayloadValidator
