@@ -12,7 +12,7 @@ But in my experience, there's not a simple way to send with any address on your 
 
 ## The Solution
 
-When you domain is authenticated with SendGrid, you can send emails with any address on your domain using SendGrid's email API.
+When your domain is authenticated with SendGrid, you can send emails with any address on your domain using SendGrid's email API.
 
 [app.sendgrid.com](https://app.sendgrid.com/) does not have a UI, however. So we need one.
 
