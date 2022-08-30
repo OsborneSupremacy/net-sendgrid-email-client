@@ -1,0 +1,47 @@
+[
+    {
+      "name": "Authentication__Google__ClientId",
+      "value": "PROVIDE_YOUR_OWN_VALUE_HERE.apps.googleusercontent.com",
+      "slotSetting": false
+    },
+    {
+      "name": "Authentication__Google__ClientSecret",
+      "value": "PROVIDE_YOUR_OWN_VALUE_HERE",
+      "slotSetting": false
+    },
+    {
+      "name": "Authorization__Admins__0",
+      "value": "YOUR-EMAIL-ADDRESS@gmail.com",
+      "slotSetting": false
+    },
+    {
+      "name": "SendGrid__Domains__0__ApiKey",
+      "value": "PROVIDE_YOUR_OWN_VALUE_HERE",
+      "slotSetting": false
+    },
+    {
+      "name": "SendGrid__Domains__0__DefaultUser",
+      "value": "info",
+      "slotSetting": false
+    },
+    {
+      "name": "SendGrid__Domains__0__Domain",
+      "value": "YOUR-DOMAIN.com",
+      "slotSetting": false
+    },
+    {
+      "name": "SendGrid__Domains__1__ApiKey",
+      "value": "PROVIDE_YOUR_OWN_VALUE_HERE",
+      "slotSetting": false
+    },
+    {
+      "name": "SendGrid__Domains__1__DefaultUser",
+      "value": "support",
+      "slotSetting": false
+    },
+    {
+      "name": "SendGrid__Domains__1__Domain",
+      "value": "ANOTHER-DOMAIN.com",
+      "slotSetting": false
+    }
+  ]

@@ -28,6 +28,8 @@ But, of course, I only want authorized users (namely me) to be able to send emai
 
 Authentication is hard, so I'm using [Google Open ID Connect](https://developers.google.com/identity/protocols/oauth2/openid-connect) to authenticate.
 
+### Google Cloud Configuration
+
 You will need to create an OAuth client ID in Google Cloud, and add the client ID and secret to the app configuration.
 
 You will also need to configure an OAuth consent screen.
@@ -37,4 +39,29 @@ You will also need to configure an OAuth consent screen.
 You may be tempted to use Google Cloud for authorization, leaving the app with a publishing status of "Testing" and whitelisting your users there. That doesn't work (unless Google fixes it in the future). Google currently does not limit access to the whitelisted test users.
 
 Instead, use .NET's policy/claims-based auth. Only users with email addresses whitelisted in the admins section of the app configuration will be able to access the email functionality.
+
+## SendGrid Configuration
+
+1. Go to [sendgrid.com](https://sendgrid.com/), registering for an account if you don't already have one.
+2. Go to Settings --> Sender Authentication.
+3. Activate / Verify both *Domain Authentication* and *Link Branding*. Both involve adding DNS records.
+    * Tip if your registrar is Namecheap: the host values that SendGrid tells you to add include your domain name. Don't copy that part of the value into Namecheap. e.g.:
+        * SendGrid's host value: `em1234.yourdomain.com`
+        * The value you should copy the Namecheap: `em1234`
+4. Go to API Keys --> Create API Keys --> Restricted Access.
+    * The only access it needs is full access to `Mail Send`.
+5. Name your key and copy the value.
+
+## .NET Configuration
+
+When running the application locally, you can provide all the values stubbed out in [appsettings.json](/src/NetSendGridEmailClient.Web/appsettings.json).
+
+### Azure Configuration
+
+If you're using running the application in Azure, add the settings as key/value pairs in the application configuration (App Service --> Configuration --> Application settings). Since the naming convention for those settings can be a little tricky, I've included an example in this repository.
+
+[SampleAzureConfiguration.json](SampleAzureConfiguration.json)
+
+
+
 
