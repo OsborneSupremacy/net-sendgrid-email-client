@@ -47,7 +47,7 @@ Instead, use .NET's policy/claims-based auth. Only users with email addresses wh
 3. Activate / Verify both *Domain Authentication* and *Link Branding*. Both involve adding DNS records.
     * Tip if your registrar is Namecheap: the host values that SendGrid tells you to add include your domain name. Don't copy that part of the value into Namecheap. e.g.:
         * SendGrid's host value: `em1234.yourdomain.com`
-        * The value you should copy the Namecheap: `em1234`
+        * The value you should copy to Namecheap: `em1234`
 4. Go to API Keys --> Create API Keys --> Restricted Access.
     * The only access it needs is full access to `Mail Send`.
 5. Name your key and copy the value.
