@@ -6,13 +6,13 @@ namespace NetSendGridEmailClient.Models;
 
 public record EmailPayload
 {
-    [Display(Name = "Sender")]
+    [Display(Name = "From Name")]
     public string FromName { get; set; } = default!;
 
-    [Display(Name = "Sender Domain")]
+    [Display(Name = "From Domain")]
     public string FromDomain { get; set; } = default!;
 
-    [Display(Name = "Sender")]
+    [Display(Name = "From")]
     public string FromAddress => $"{FromName}@{FromDomain}";
 
     public string? Subject { get; set; } = default!;

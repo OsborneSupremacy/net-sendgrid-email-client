@@ -1,4 +1,5 @@
-﻿using Google.Apis.Auth.AspNetCore3;
+﻿using System.Reflection;
+using Google.Apis.Auth.AspNetCore3;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -30,13 +31,14 @@ public class EmailController : Controller
         _sendGridEmailService = sendGridEmailService ?? throw new ArgumentNullException(nameof(sendGridEmailService));
     }
 
-    protected void SetComposeViewData()
+    protected IActionResult SendToEditor(EmailPayload model)
     {
         ViewBag.FromDomain = new SelectList(
             _sendGridSettings
             .Domains
             .Select(x => x.Domain)
         );
+        return View("Index", model);
     }
 
     public IActionResult Index()
@@ -51,17 +53,13 @@ public class EmailController : Controller
             Body = string.Empty
         };
 
-        SetComposeViewData();
-        return View(model);
+        return SendToEditor(model);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Compose(EmailPayload model)
-    {
-        SetComposeViewData();
-        return View("Index", model);
-    }
+    public IActionResult Compose(EmailPayload model) =>
+        SendToEditor(model);
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -72,10 +70,7 @@ public class EmailController : Controller
             .AddToModelState(ModelState);
 
         if (!ModelState.IsValid)
-        {
-            SetComposeViewData();
-            return View("Index", model);
-        }
+            return SendToEditor(model);
 
         return View(model);
     }
@@ -89,10 +84,7 @@ public class EmailController : Controller
             .AddToModelState(ModelState);
 
         if (!ModelState.IsValid)
-        {
-            SetComposeViewData();
-            return View("Index", model);
-        }
+            return SendToEditor(model);
 
         await _sendGridEmailService.SendAsync(model);
 

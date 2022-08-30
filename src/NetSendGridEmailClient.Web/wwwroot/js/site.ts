@@ -1,14 +1,14 @@
 ﻿
 function addRecipientField(recipientType: string) {
 
-    let newIndex = document
+    const newIndex = document
         .querySelectorAll(`input[data-recipientType="${recipientType}"]`)
         .length;
 
-    let newDiv = document.createElement('div');
+    const newDiv = document.createElement('div');
     newDiv.setAttribute('class', 'input-group mb-3');
 
-    let newInput = document.createElement('input');
+    const newInput = document.createElement('input');
     newInput.setAttribute('type', 'email');
     newInput.setAttribute('class', 'form-control');
     newInput.setAttribute('data-recipientType', recipientType);
@@ -25,7 +25,7 @@ function addRecipientField(recipientType: string) {
 
 function removeRecipientField(recipientType: string) {
 
-    let fields = document
+    const fields = document
         .querySelectorAll(`input[data-recipientType="${recipientType}"]`);
 
     // don't let all fields be removed
@@ -37,14 +37,14 @@ function removeRecipientField(recipientType: string) {
 }
 
 function tryUpdateHtmlElementInnerText(elementId: string, newText: string) {
-    let element = document.getElementById(elementId);
+    const element = document.getElementById(elementId);
 
     if (element != null)
         element.innerText = newText;
 }
 
 function tryUpdateHtmlInputValue(elementId: string, newText: string) {
-    let element = document.getElementById(elementId) as HTMLInputElement;
+    const element = document.getElementById(elementId) as HTMLInputElement;
 
     if (element != null)
         element.value = newText;
@@ -56,7 +56,7 @@ async function domainChanged(
     senderNameInputId: string) {
 
     // update label
-    tryUpdateHtmlElementInnerText(domainLabelId, newDomain);
+    tryUpdateHtmlElementInnerText(domainLabelId, `@${newDomain}`);
 
     // get default user
     const response = await window.fetch('/settings/getDomainModels', {
