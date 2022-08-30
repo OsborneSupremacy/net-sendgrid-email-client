@@ -36,3 +36,46 @@ function removeRecipientField(recipientType: string) {
         .removeChild(fields[fields.length - 1].parentNode);
 }
 
+function tryUpdateHtmlElementInnerText(elementId: string, newText: string) {
+    let element = document.getElementById(elementId);
+
+    if (element != null)
+        element.innerText = newText;
+}
+
+function tryUpdateHtmlInputValue(elementId: string, newText: string) {
+    let element = document.getElementById(elementId) as HTMLInputElement;
+
+    if (element != null)
+        element.value = newText;
+}
+
+async function domainChanged(
+    newDomain: string,
+    domainLabelId: string,
+    senderNameInputId: string) {
+
+    // update label
+    tryUpdateHtmlElementInnerText(domainLabelId, newDomain);
+
+    // get default user
+    const response = await window.fetch('/settings/getDomainModels', {
+        method: 'GET'
+    });
+
+    if (!response.ok)
+        return;
+
+    const domains: DomainModel[] = await response.json();
+    const domain = domains.filter(x => x.domain === newDomain);
+
+    if (domain.length === 0)
+        return;
+
+    tryUpdateHtmlInputValue(senderNameInputId, domain[0].defaultUser);
+}
+
+interface DomainModel {
+    domain: string;
+    defaultUser: string;
+}

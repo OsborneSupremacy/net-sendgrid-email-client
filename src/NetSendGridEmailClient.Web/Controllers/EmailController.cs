@@ -1,6 +1,7 @@
 ﻿using Google.Apis.Auth.AspNetCore3;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace NetSendGridEmailClient.Web.Controllers;
 
@@ -29,6 +30,15 @@ public class EmailController : Controller
         _sendGridEmailService = sendGridEmailService ?? throw new ArgumentNullException(nameof(sendGridEmailService));
     }
 
+    protected void SetComposeViewData()
+    {
+        ViewBag.FromDomain = new SelectList(
+            _sendGridSettings
+            .Domains
+            .Select(x => x.Domain)
+        );
+    }
+
     public IActionResult Index()
     {
         EmailPayload model = new()
@@ -36,18 +46,22 @@ public class EmailController : Controller
             To = new List<string>() { string.Empty },
             Cc = new List<string>() { string.Empty },
             Bcc = new List<string>() { string.Empty },
-            FromName = _sendGridSettings.DefaultUser,
-            FromDomain = _sendGridSettings.Domain,
+            FromName = _sendGridSettings.Domains.First().DefaultUser,
+            FromDomain = _sendGridSettings.Domains.First().Domain,
             Body = string.Empty
         };
 
+        SetComposeViewData();
         return View(model);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Compose(EmailPayload model) =>
-        View("Index", model);
+    public IActionResult Compose(EmailPayload model)
+    {
+        SetComposeViewData();
+        return View("Index", model);
+    }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -58,7 +72,10 @@ public class EmailController : Controller
             .AddToModelState(ModelState);
 
         if (!ModelState.IsValid)
+        {
+            SetComposeViewData();
             return View("Index", model);
+        }
 
         return View(model);
     }
@@ -72,7 +89,10 @@ public class EmailController : Controller
             .AddToModelState(ModelState);
 
         if (!ModelState.IsValid)
+        {
+            SetComposeViewData();
             return View("Index", model);
+        }
 
         await _sendGridEmailService.SendAsync(model);
 

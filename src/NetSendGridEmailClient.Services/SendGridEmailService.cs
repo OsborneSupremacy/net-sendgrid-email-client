@@ -18,6 +18,11 @@ public class SendGridEmailService
 
     public async Task<(bool success, string details)> SendAsync(EmailPayload emailPayload)
     {
+        var domain = _settings
+            .Domains
+            .Where(x => x.Domain == emailPayload.FromDomain)
+            .Single()!;
+
         SendGridMessage msg = new()
         {
             From = emailPayload.FromAddress.ToEmail(),
@@ -31,7 +36,7 @@ public class SendGridEmailService
         if(emailPayload.Bcc.AnyEmails())
             msg.AddBccs(emailPayload.Bcc.ToEmailList());
 
-        var response = await new SendGridClient(_settings.ApiKey)
+        var response = await new SendGridClient(domain.ApiKey)
             .SendEmailAsync(msg);
 
         if (response.IsSuccessStatusCode)

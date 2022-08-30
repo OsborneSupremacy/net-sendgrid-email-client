@@ -6,12 +6,13 @@ namespace NetSendGridEmailClient.Models;
 
 public record EmailPayload
 {
-    [Display(Name = "From")]
+    [Display(Name = "Sender")]
     public string FromName { get; set; } = default!;
 
+    [Display(Name = "Sender Domain")]
     public string FromDomain { get; set; } = default!;
 
-    [Display(Name = "From")]
+    [Display(Name = "Sender")]
     public string FromAddress => $"{FromName}@{FromDomain}";
 
     public string? Subject { get; set; } = default!;
@@ -44,6 +45,7 @@ public class EmailPayloadValidator : AbstractValidator<EmailPayload>
     public EmailPayloadValidator()
     {
         RuleFor(x => x.FromName).NotEmpty();
+        RuleFor(x => x.FromDomain).NotEmpty();
         RuleFor(x => x.Body).NotEmpty();
 
         RuleFor(x => x.To).Must(x => x.Any());

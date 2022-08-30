@@ -15,10 +15,17 @@
     }
 
     <div class="mb-3">
+        @Html.LabelFor(model => model.FromDomain, new { @class="form-label" })
+        <div class="input-group mb-3">
+            @Html.DropDownListFor(model => model.FromDomain, null, htmlAttributes: new { @class = "form-select", onchange="domainChanged(this.value, 'sender_domain_label', 'sender_name_input');" })
+        </div>
+    </div>
+
+    <div class="mb-3">
         @Html.LabelFor(model => model.FromName, new { @class="form-label" })
         <div class="input-group mb-3">
-            @Html.TextBoxFor(model => model.FromName, new { @class="form-control", placeholder="From" })
-            <span class="input-group-text" >@@@Model.FromDomain</span>
+            @Html.TextBoxFor(model => model.FromName, new { @class="form-control", placeholder="From", id = "sender_name_input" })
+            <span id="sender_domain_label" class="input-group-text" >@@@Model.FromDomain</span>
         </div>
     </div>
 
@@ -117,5 +124,6 @@
     @Html.HiddenFor(model => model.FromDomain);
 
     <button type="submit" onclick='this.form.action="/Email/Confirm"' class="btn btn-primary">Next</button>
+
 }
 

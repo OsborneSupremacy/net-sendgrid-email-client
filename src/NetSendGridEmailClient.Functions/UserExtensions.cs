@@ -12,7 +12,7 @@ public static class UserExtensions
         if (!input.IsLoggedIn()) return string.Empty;
 
         return input.Claims
-            .Where(x => x.Type == "name")?
+            .Where(x => x.Type.Equals("name", StringComparison.OrdinalIgnoreCase))
             .FirstOrDefault()?
             .Value ?? "User";
     }
