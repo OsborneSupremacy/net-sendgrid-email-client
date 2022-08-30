@@ -20,7 +20,7 @@ This application is a simple .NET MVC web app that serves this purpose.
 
 ## Authentication
 
-If you only care about being able to do this from you local machine, you could just pull down the source and run the app locally in Visual Studio.
+If you only care about being able to do this from your local machine, you could just pull down the source and run the app locally in Visual Studio.
 
 However, I wanted to be able to send emails from any device. For this we can deploy to an Azure app service. There's a free tier (with quotas) that meets my needs.
 
