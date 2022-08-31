@@ -1,8 +1,8 @@
-﻿using System.Reflection;
-using Google.Apis.Auth.AspNetCore3;
+﻿using Google.Apis.Auth.AspNetCore3;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using NetSendGridEmailClient.Interface;
 
 namespace NetSendGridEmailClient.Web.Controllers;
 
@@ -16,19 +16,23 @@ public class EmailController : Controller
 
     private readonly EmailPayloadValidator _emailPayloadValidator;
 
-    private readonly SendGridEmailService _sendGridEmailService;
+    private readonly IEmailService _emailService;
+
+    private readonly IMarkdownService _markdownService;
 
     public EmailController(
         ILogger<HomeController> logger,
         SendGridSettings sendGridSettings,
         EmailPayloadValidator emailPayloadValidator,
-        SendGridEmailService sendGridEmailService
+        IEmailService emailService,
+        IMarkdownService markdownService
         )
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _sendGridSettings = sendGridSettings ?? throw new ArgumentNullException(nameof(sendGridSettings));
         _emailPayloadValidator = emailPayloadValidator ?? throw new ArgumentNullException(nameof(emailPayloadValidator));
-        _sendGridEmailService = sendGridEmailService ?? throw new ArgumentNullException(nameof(sendGridEmailService));
+        _emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
+        _markdownService = markdownService ?? throw new ArgumentNullException(nameof(markdownService));
     }
 
     protected IActionResult SendToEditor(EmailPayload model)
@@ -69,6 +73,8 @@ public class EmailController : Controller
             .Validate(model)
             .AddToModelState(ModelState);
 
+        model.HtmlBody = _markdownService.RenderHtml(model.Body);
+
         if (!ModelState.IsValid)
             return SendToEditor(model);
 
@@ -86,7 +92,7 @@ public class EmailController : Controller
         if (!ModelState.IsValid)
             return SendToEditor(model);
 
-        await _sendGridEmailService.SendAsync(model);
+        await _emailService.SendAsync(model);
 
         return View("Sent");
     }

@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using FluentValidation;
-using Markdig;
+using NetSendGridEmailClient.Interface;
 
 namespace NetSendGridEmailClient.Models;
 
-public record EmailPayload
+public record EmailPayload : IEmailPayload
 {
     [Display(Name = "From Name")]
     public string FromName { get; set; } = default!;
@@ -19,16 +19,7 @@ public record EmailPayload
 
     public string Body { get; set; } = default!;
 
-    public string HtmlBody
-    {
-        get
-        {
-            var pipeline = new MarkdownPipelineBuilder()
-                .UseAdvancedExtensions()
-                .Build();
-            return Markdown.ToHtml(Body ?? string.Empty, pipeline);
-        }
-    }
+    public string? HtmlBody { get; set; }
 
     [Display(Name = "To")]
     public IList<string> To { get; set; } = default!;

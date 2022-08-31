@@ -14,9 +14,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetSendGridEmailClient.Web"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetSendGridEmailClient.Functions", "src\NetSendGridEmailClient.Functions\NetSendGridEmailClient.Functions.csproj", "{2366ADF0-BD55-4F54-A8A1-8142D7EEB820}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetSendGridEmailClient.Services", "src\NetSendGridEmailClient.Services\NetSendGridEmailClient.Services.csproj", "{A15B7107-1005-4729-831F-76EEB18A27B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetSendGridEmailClient.Services", "src\NetSendGridEmailClient.Services\NetSendGridEmailClient.Services.csproj", "{A15B7107-1005-4729-831F-76EEB18A27B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetSendGridEmailClient.Models", "src\NetSendGridEmailClient.Models\NetSendGridEmailClient.Models.csproj", "{D35A31DF-69B6-443F-B72C-D814E10A29C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetSendGridEmailClient.Models", "src\NetSendGridEmailClient.Models\NetSendGridEmailClient.Models.csproj", "{D35A31DF-69B6-443F-B72C-D814E10A29C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetSendGridEmailClient.Interface", "src\NetSendGridEmailClient.Interface\NetSendGridEmailClient.Interface.csproj", "{4C1CD97A-A57A-4505-9D17-75CFE17E4225}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +42,10 @@ Global
 		{D35A31DF-69B6-443F-B72C-D814E10A29C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D35A31DF-69B6-443F-B72C-D814E10A29C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D35A31DF-69B6-443F-B72C-D814E10A29C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C1CD97A-A57A-4505-9D17-75CFE17E4225}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C1CD97A-A57A-4505-9D17-75CFE17E4225}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C1CD97A-A57A-4505-9D17-75CFE17E4225}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C1CD97A-A57A-4505-9D17-75CFE17E4225}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

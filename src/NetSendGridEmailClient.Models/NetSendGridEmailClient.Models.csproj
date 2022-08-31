@@ -8,7 +8,10 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.1.0" />
-    <PackageReference Include="Markdig" Version="0.30.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NetSendGridEmailClient.Interface\NetSendGridEmailClient.Interface.csproj" />
   </ItemGroup>
 
 </Project>

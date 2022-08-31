@@ -1,11 +1,12 @@
 ﻿using NetSendGridEmailClient.Functions;
 using NetSendGridEmailClient.Models;
+using NetSendGridEmailClient.Interface;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
 namespace NetSendGridEmailClient.Services;
 
-public class SendGridEmailService
+public class SendGridEmailService : IEmailService
 {
     private readonly SendGridSettings _settings;
 
@@ -16,7 +17,7 @@ public class SendGridEmailService
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
     }
 
-    public async Task<(bool success, string details)> SendAsync(EmailPayload emailPayload)
+    public async Task<(bool success, string details)> SendAsync(IEmailPayload emailPayload)
     {
         var domain = _settings
             .Domains
@@ -31,9 +32,9 @@ public class SendGridEmailService
         };
 
         msg.AddTos(emailPayload.To.ToEmailList());
-        if(emailPayload.Cc.AnyEmails())
+        if (emailPayload.Cc.AnyEmails())
             msg.AddCcs(emailPayload.Cc.ToEmailList());
-        if(emailPayload.Bcc.AnyEmails())
+        if (emailPayload.Bcc.AnyEmails())
             msg.AddBccs(emailPayload.Bcc.ToEmailList());
 
         var response = await new SendGridClient(domain.ApiKey)

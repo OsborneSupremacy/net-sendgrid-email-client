@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Google.Apis.Auth.AspNetCore3;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using NetSendGridEmailClient.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -52,7 +53,8 @@ SendGridSettings sendGridSettings = new();
 configuration.GetSection("SendGrid").Bind(sendGridSettings);
 builder.Services.AddSingleton(sendGridSettings);
 
-builder.Services.AddScoped<SendGridEmailService>();
+builder.Services.AddSingleton<IMarkdownService, MarkdownService>();
+builder.Services.AddScoped<IEmailService, SendGridEmailService>();
 
 var app = builder.Build();
 
