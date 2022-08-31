@@ -6,6 +6,8 @@ namespace NetSendGridEmailClient.Models;
 
 public record EmailPayload : IEmailPayload
 {
+    public Guid EmailPayloadId { get; init; }
+
     [Display(Name = "From Name")]
     public string FromName { get; set; } = default!;
 
@@ -35,6 +37,8 @@ public class EmailPayloadValidator : AbstractValidator<EmailPayload>
 {
     public EmailPayloadValidator()
     {
+        RuleFor(x => x.EmailPayloadId).NotEmpty();
+
         RuleFor(x => x.FromName).NotEmpty();
         RuleFor(x => x.FromDomain).NotEmpty();
         RuleFor(x => x.Body).NotEmpty();

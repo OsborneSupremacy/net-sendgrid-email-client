@@ -2,6 +2,8 @@
 
 public interface IEmailPayload
 {
+    public Guid EmailPayloadId { get; init; }
+
     public string FromName { get; set; }
 
     public string FromDomain { get; set; }

@@ -10,7 +10,7 @@ namespace NetSendGridEmailClient.Web.Controllers;
 [Authorize(Policy = "Admin")]
 public class EmailController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly ILogger<EmailController> _logger;
 
     private readonly SendGridSettings _sendGridSettings;
 
@@ -21,7 +21,7 @@ public class EmailController : Controller
     private readonly IMarkdownService _markdownService;
 
     public EmailController(
-        ILogger<HomeController> logger,
+        ILogger<EmailController> logger,
         SendGridSettings sendGridSettings,
         EmailPayloadValidator emailPayloadValidator,
         IEmailService emailService,
@@ -49,6 +49,7 @@ public class EmailController : Controller
     {
         EmailPayload model = new()
         {
+            EmailPayloadId = Guid.NewGuid(),
             To = new List<string>() { string.Empty },
             Cc = new List<string>() { string.Empty },
             Bcc = new List<string>() { string.Empty },

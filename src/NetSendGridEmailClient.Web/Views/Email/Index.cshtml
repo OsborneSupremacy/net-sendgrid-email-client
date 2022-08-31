@@ -122,6 +122,7 @@
     </div>
 
     @Html.HiddenFor(model => model.FromDomain);
+    @Html.HiddenFor(model => model.EmailPayloadId);
 
     <button type="submit" onclick='this.form.action="/Email/Confirm"' class="btn btn-primary">Next</button>
 

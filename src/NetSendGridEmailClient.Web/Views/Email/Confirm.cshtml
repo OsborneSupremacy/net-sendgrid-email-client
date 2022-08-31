@@ -59,6 +59,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.EmailPayloadId);
     @Html.HiddenFor(model => model.FromName)
     @Html.HiddenFor(model => model.FromDomain)
     @Html.HiddenFor(model => model.Subject)

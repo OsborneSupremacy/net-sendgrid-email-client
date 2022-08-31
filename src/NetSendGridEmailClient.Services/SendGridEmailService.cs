@@ -32,8 +32,10 @@ public class SendGridEmailService : IEmailService
         };
 
         msg.AddTos(emailPayload.To.ToEmailList());
+
         if (emailPayload.Cc.AnyEmails())
             msg.AddCcs(emailPayload.Cc.ToEmailList());
+
         if (emailPayload.Bcc.AnyEmails())
             msg.AddBccs(emailPayload.Bcc.ToEmailList());
 
