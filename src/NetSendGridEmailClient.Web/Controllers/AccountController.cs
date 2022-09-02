@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace NetSendGridEmailClient.Web.Controllers;
+﻿namespace NetSendGridEmailClient.Web.Controllers;
 
 public class AccountController : Controller
 {

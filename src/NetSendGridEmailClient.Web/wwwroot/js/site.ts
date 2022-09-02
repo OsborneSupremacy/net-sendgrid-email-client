@@ -101,12 +101,28 @@ async function attachmentChanged(
         body: formData
     });
 
+    resetFileInput(sender);
+
     if (!response.ok) {
-        alert(response.statusText);
+        switch (response.status) {
+            case 413:
+                alert("File is too large. Limit is 20MB.");
+                break;
+            default:
+                console.log('Response status', response.status);
+                alert("File uploaded failed. See console for error details.");
+        }
+
+        console.log('Error response', response);
         return;
     }
 
     await getAndListAttachments(emailPayloadId, uploadedAttachmentsContainerName);
+}
+
+function resetFileInput(input: HTMLInputElement) {
+    input.files = null;
+    input.value = '';
 }
 
 async function getAttachmentList(emailPayloadId: string): Promise<AttachmentName[]> {

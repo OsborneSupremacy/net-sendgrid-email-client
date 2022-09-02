@@ -1,6 +1,5 @@
 ﻿using Google.Apis.Auth.AspNetCore3;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using NetSendGridEmailClient.Interface;
 
 namespace NetSendGridEmailClient.Web.Controllers;
@@ -24,9 +23,14 @@ public class AttachmentController : Controller
 
     [HttpPost]
     [Produces("application/json")]
-    [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+    [RequestSizeLimit(20971520)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status413PayloadTooLarge)]
     public async Task<IActionResult> Upload(Guid emailPayloadId, IFormFile attachment)
     {
+        if (attachment == null) // will be null when request exceeds limit
+            return StatusCode(StatusCodes.Status413PayloadTooLarge);
+
         using var ms = new MemoryStream();
         attachment.CopyTo(ms);
 
