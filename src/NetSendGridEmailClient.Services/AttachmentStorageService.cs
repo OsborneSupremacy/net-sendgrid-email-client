@@ -43,4 +43,14 @@ public class AttachmentStorageService : IAttachmentStorageService
 
         return Task.CompletedTask;
     }
+
+    public Task RemoveAttachmentAsync(Guid emailPayloadId, Guid attachmentId)
+    {
+        if (!_memoryCache.TryGetValue<IAttachmentCollection>(emailPayloadId, out var attachmentCollection))
+            return Task.CompletedTask;
+
+        attachmentCollection.Remove(attachmentId);
+
+        return Task.CompletedTask;
+    }
 }

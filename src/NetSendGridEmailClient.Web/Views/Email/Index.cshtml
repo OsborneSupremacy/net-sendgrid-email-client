@@ -108,20 +108,19 @@
     @*attachments*@
     <div class="mb-3">
 
-        <label class="form-label" for="Bcc">Attachments</label>
+        <label class="form-label">Attachments</label>
 
-        <div>
-            <div class="input-group mb-3">
-                <input type="file" value="" class="form-control" onchange="attachmentChanged(this, '@Model.EmailPayloadId');" name="Attachment" placeholder="Attachment" />
-            </div>
-        </div>
+        <input
+            id="attachmentInput"
+            style="display: none"
+            type="file" 
+            onchange="attachmentChanged(this, '@Model.EmailPayloadId', 'uploadedAttachmentsContainer');" />
 
         <div class="mb-3">
-            <div class="btn-group" role="group">
-                <button type="button" tabindex="-1" title="Add an Attachment" class="btn btn-info">+</button>
-                <button type="button" tabindex="-1" title="Remove an Attachment" class="btn btn-warning">-</button>
-            </div>
+            <label for="attachmentInput" type="button" tabindex="-1" title="Add an Attachment" class="btn btn-info">+</label>
         </div>
+
+        <div id="uploadedAttachmentsContainer"></div>
 
     </div>
 
@@ -146,5 +145,8 @@
 
     <button type="submit" onclick='this.form.action="/Email/Confirm"' class="btn btn-primary">Next</button>
 
+    <script type="text/javascript">
+        getAndListAttachments('@Model.EmailPayloadId', 'uploadedAttachmentsContainer');
+    </script>
 }
 

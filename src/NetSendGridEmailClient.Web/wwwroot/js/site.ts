@@ -81,9 +81,15 @@ interface DomainModel {
     defaultUser: string;
 }
 
-async function attachmentChanged(sender: HTMLInputElement, emailPayloadId: string) {
+async function attachmentChanged(
+    sender: HTMLInputElement,
+    emailPayloadId: string,
+    uploadedAttachmentsContainerName: string)
+{
+    const attachments : FileList | null = sender.files;
+    if (attachments === null) return;
 
-    const attachment = sender.files[0];
+    const attachment = attachments[0];
     if (attachment === undefined) return;
 
     const formData = new FormData();
@@ -100,29 +106,72 @@ async function attachmentChanged(sender: HTMLInputElement, emailPayloadId: strin
         return;
     }
 
-    // clear so input can be re-used
-    sender.files[0] = null;
-    sender.value = '';
-
-    await getAttachmentList(emailPayloadId);
+    await getAndListAttachments(emailPayloadId, uploadedAttachmentsContainerName);
 }
 
-async function getAttachmentList(emailPayloadId: string) {
+async function getAttachmentList(emailPayloadId: string): Promise<AttachmentName[]> {
 
     const response = await window.fetch(`/attachment/getallnames?emailPayloadId=${emailPayloadId}`, {
         method: 'GET'
     });
 
     if (!response.ok)
-        return;
+        return [];
 
     const attachments: AttachmentName[] = await response.json();
+    return attachments;
 }
 
-function listAttachment(attachments: AttachmentName[]) {
-
+async function getAndListAttachments(
+    emailPayloadId: string,
+    uploadedAttachmentsContainerName: string)
+{
+    const attachments = await getAttachmentList(emailPayloadId);
+    listAttachments(emailPayloadId, uploadedAttachmentsContainerName, attachments);
 }
 
+function listAttachments(
+    emailPayloadId: string,
+    uploadedAttachmentsContainerName: string,
+    attachments: AttachmentName[])
+{
+    const container = document.getElementById(uploadedAttachmentsContainerName);
+    if (container === null) return;
+
+    container.replaceChildren();
+
+    attachments.forEach((attachment) => {
+
+        const newDiv = document.createElement('div');
+
+        newDiv.setAttribute('class', 'alert alert-secondary alert-dismissible fade show');
+        newDiv.setAttribute('role', 'alert');
+        newDiv.innerText = attachment.fileName;
+
+        const removeButton = document.createElement('button');
+        removeButton.setAttribute('type', 'button');
+        removeButton.setAttribute('class', 'btn-close');
+        removeButton.setAttribute('data-bs-dismiss', 'alert');
+        removeButton.setAttribute('aria-label', 'Remove');
+        removeButton.setAttribute('onclick', `removeAttachment("${emailPayloadId}", "${attachment.attachmentId}");`);
+
+        newDiv.appendChild(removeButton);
+
+        container.appendChild(newDiv);
+    });
+}
+
+async function removeAttachment(emailPayloadId: string, attachmentId: string)
+{
+    const formData = new FormData();
+    formData.append('emailPayloadId', emailPayloadId);
+    formData.append('attachmentId', attachmentId);
+
+    await window.fetch('/attachment/remove', {
+        method: 'POST',
+        body: formData
+    });
+}
 
 interface AttachmentName {
     fileName: string;

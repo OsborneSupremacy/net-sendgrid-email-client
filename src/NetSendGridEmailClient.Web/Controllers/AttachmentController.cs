@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using Google.Apis.Auth.AspNetCore3;
+﻿using Google.Apis.Auth.AspNetCore3;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using NetSendGridEmailClient.Interface;
-using NetSendGridEmailClient.Models;
 
 namespace NetSendGridEmailClient.Web.Controllers;
 
@@ -41,9 +38,20 @@ public class AttachmentController : Controller
             attachment.ContentType
         );
 
-        await _attachmentStorageService.SaveAttachmentAsync(emailPayloadId, storedAttachment);
+        await _attachmentStorageService
+            .SaveAttachmentAsync(emailPayloadId, storedAttachment);
 
         return new OkObjectResult(storedAttachment.AttachmentId);
+    }
+
+    [HttpPost]
+    [Produces("application/json")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> Remove(Guid emailPayloadId, Guid attachmentId)
+    {
+        await _attachmentStorageService
+            .RemoveAttachmentAsync(emailPayloadId, attachmentId);
+        return new OkResult();
     }
 
     [HttpGet]
@@ -56,7 +64,8 @@ public class AttachmentController : Controller
         if (!Guid.TryParse(emailPayloadId, out var emailPayloadId2))
             result = new List<IAttachment>();
         else
-            result = await _attachmentStorageService.GetAttachmentsAsync(emailPayloadId2);
+            result = await _attachmentStorageService
+                .GetAttachmentsAsync(emailPayloadId2);
 
         return new OkObjectResult(
             result.Select(x => new { x.FileName, x.AttachmentId })

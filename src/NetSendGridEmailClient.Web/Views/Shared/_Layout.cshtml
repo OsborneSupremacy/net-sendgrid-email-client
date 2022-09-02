@@ -36,6 +36,10 @@
             </div>
         </nav>
     </header>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -49,7 +53,6 @@
             <a asp-area="" asp-controller="Home" asp-action="TermsOfService">Terms of Service</a>
         </div>
     </footer>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>
