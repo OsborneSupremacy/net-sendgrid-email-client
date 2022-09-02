@@ -13,4 +13,6 @@ public class AttachmentCollection : IAttachmentCollection
 
     public void Add(IAttachment attachment) => 
         _attachments.Add(attachment);
+
+    public IList<IAttachment> GetAll() => _attachments;
 }

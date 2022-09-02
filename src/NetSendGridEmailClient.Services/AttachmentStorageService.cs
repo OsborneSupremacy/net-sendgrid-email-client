@@ -22,8 +22,8 @@ public class AttachmentStorageService : IAttachmentStorageService
 
     public Task<IList<IAttachment>> GetAttachmentsAsync(Guid emailPayloadId)
     {
-        if (_memoryCache.TryGetValue<IList<IAttachment>>(emailPayloadId, out var emailAttachments))
-            return Task.FromResult(emailAttachments);
+        if (_memoryCache.TryGetValue<IAttachmentCollection>(emailPayloadId, out var attachmentCollection))
+            return Task.FromResult(attachmentCollection.GetAll());
 
         return Task.FromResult(Enumerable.Empty<IAttachment>().ToList() as IList<IAttachment>);
     }
@@ -36,12 +36,11 @@ public class AttachmentStorageService : IAttachmentStorageService
             return Task.CompletedTask;
         };
 
-        var cacheEntry = _memoryCache.CreateEntry(emailPayloadId);
-
         attachmentCollection = new AttachmentCollection();
         attachmentCollection.Add(attachment);
 
-        cacheEntry.Value = attachmentCollection;
+        _memoryCache.Set(emailPayloadId, attachmentCollection);
+
         return Task.CompletedTask;
     }
 }

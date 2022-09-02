@@ -58,6 +58,7 @@ async function attachmentChanged(sender, emailPayloadId) {
     const formData = new FormData();
     formData.append('emailPayloadId', emailPayloadId);
     formData.append('attachment', attachment);
+    console.log('emailPayloadId', emailPayloadId);
     const response = await window.fetch('/attachment/upload', {
         method: 'POST',
         body: formData
@@ -66,13 +67,18 @@ async function attachmentChanged(sender, emailPayloadId) {
         alert(response.statusText);
         return;
     }
+    // clear so input can be re-used
+    sender.files[0] = null;
+    sender.value = '';
+    await getAttachmentList(emailPayloadId);
 }
-const convertToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result?.toString() || '');
-        reader.onerror = error => reject(error);
+async function getAttachmentList(emailPayloadId) {
+    const response = await window.fetch(`/attachment/getallnames?emailPayloadId=${emailPayloadId}`, {
+        method: 'GET'
     });
-};
+    if (!response.ok)
+        return;
+    const attachments = await response.json();
+    console.log('attachments', attachments);
+}
 //# sourceMappingURL=site.js.map

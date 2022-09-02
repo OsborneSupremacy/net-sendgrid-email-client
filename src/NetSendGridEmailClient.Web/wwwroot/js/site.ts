@@ -99,5 +99,33 @@ async function attachmentChanged(sender: HTMLInputElement, emailPayloadId: strin
         alert(response.statusText);
         return;
     }
+
+    // clear so input can be re-used
+    sender.files[0] = null;
+    sender.value = '';
+
+    await getAttachmentList(emailPayloadId);
+}
+
+async function getAttachmentList(emailPayloadId: string) {
+
+    const response = await window.fetch(`/attachment/getallnames?emailPayloadId=${emailPayloadId}`, {
+        method: 'GET'
+    });
+
+    if (!response.ok)
+        return;
+
+    const attachments: AttachmentName[] = await response.json();
+}
+
+function listAttachment(attachments: AttachmentName[]) {
+
+}
+
+
+interface AttachmentName {
+    fileName: string;
+    attachmentId: string;
 }
 
