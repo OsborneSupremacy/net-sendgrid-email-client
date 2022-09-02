@@ -105,6 +105,26 @@
 
     </div>
 
+    @*attachments*@
+    <div class="mb-3">
+
+        <label class="form-label" for="Bcc">Attachments</label>
+
+        <div>
+            <div class="input-group mb-3">
+                <input type="file" value="" class="form-control" onchange="attachmentChanged(this, '@Model.EmailPayloadId');" name="Attachment" placeholder="Attachment" />
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <div class="btn-group" role="group">
+                <button type="button" tabindex="-1" title="Add an Attachment" class="btn btn-info">+</button>
+                <button type="button" tabindex="-1" title="Remove an Attachment" class="btn btn-warning">-</button>
+            </div>
+        </div>
+
+    </div>
+
     <div class="mb-3">
 
         @Html.LabelFor(model => model.Body, new { @class="form-label" })

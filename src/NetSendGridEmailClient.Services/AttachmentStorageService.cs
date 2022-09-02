@@ -30,18 +30,18 @@ public class AttachmentStorageService : IAttachmentStorageService
 
     public Task SaveAttachmentAsync(Guid emailPayloadId, IAttachment attachment)
     {
-        if(_memoryCache.TryGetValue<IList<IAttachment>>(emailPayloadId, out var emailAttachments))
+        if(_memoryCache.TryGetValue<IAttachmentCollection>(emailPayloadId, out var attachmentCollection))
         {
-            emailAttachments.Add(attachment);
+            attachmentCollection.Add(attachment);
             return Task.CompletedTask;
         };
 
         var cacheEntry = _memoryCache.CreateEntry(emailPayloadId);
 
-        emailAttachments = (IList<IAttachment>)new List<StoredAttachment>();
-        emailAttachments.Add(attachment);
+        attachmentCollection = new AttachmentCollection();
+        attachmentCollection.Add(attachment);
 
-        cacheEntry.Value = emailAttachments;
+        cacheEntry.Value = attachmentCollection;
         return Task.CompletedTask;
     }
 }

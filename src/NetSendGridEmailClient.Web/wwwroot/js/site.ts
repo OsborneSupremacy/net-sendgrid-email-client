@@ -53,7 +53,8 @@ function tryUpdateHtmlInputValue(elementId: string, newText: string) {
 async function domainChanged(
     newDomain: string,
     domainLabelId: string,
-    senderNameInputId: string) {
+    senderNameInputId: string
+) {
 
     // update label
     tryUpdateHtmlElementInnerText(domainLabelId, `@${newDomain}`);
@@ -79,3 +80,24 @@ interface DomainModel {
     domain: string;
     defaultUser: string;
 }
+
+async function attachmentChanged(sender: HTMLInputElement, emailPayloadId: string) {
+
+    const attachment = sender.files[0];
+    if (attachment === undefined) return;
+
+    const formData = new FormData();
+    formData.append('emailPayloadId', emailPayloadId);
+    formData.append('attachment', attachment);
+
+    const response = await window.fetch('/attachment/upload', {
+        method: 'POST',
+        body: formData
+    });
+
+    if (!response.ok) {
+        alert(response.statusText);
+        return;
+    }
+}
+

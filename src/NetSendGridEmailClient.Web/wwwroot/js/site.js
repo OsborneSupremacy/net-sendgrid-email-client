@@ -51,4 +51,28 @@ async function domainChanged(newDomain, domainLabelId, senderNameInputId) {
         return;
     tryUpdateHtmlInputValue(senderNameInputId, domain[0].defaultUser);
 }
+async function attachmentChanged(sender, emailPayloadId) {
+    const attachment = sender.files[0];
+    if (attachment === undefined)
+        return;
+    const formData = new FormData();
+    formData.append('emailPayloadId', emailPayloadId);
+    formData.append('attachment', attachment);
+    const response = await window.fetch('/attachment/upload', {
+        method: 'POST',
+        body: formData
+    });
+    if (!response.ok) {
+        alert(response.statusText);
+        return;
+    }
+}
+const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result?.toString() || '');
+        reader.onerror = error => reject(error);
+    });
+};
 //# sourceMappingURL=site.js.map
