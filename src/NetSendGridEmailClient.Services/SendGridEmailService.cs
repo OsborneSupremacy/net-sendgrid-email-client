@@ -7,14 +7,18 @@ public class SendGridEmailService : IEmailService
 {
     private readonly SendGridSettings _settings;
 
+    private readonly AttachmentStorageService _attachmentStorageService;
+
     public SendGridEmailService(
-        SendGridSettings settings
+        SendGridSettings settings,
+        AttachmentStorageService attachmentStorageService
         )
     {
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
+        _attachmentStorageService = attachmentStorageService ?? throw new ArgumentNullException(nameof(attachmentStorageService));
     }
 
-    public async Task<(bool success, string details)> SendAsync(IEmailPayload emailPayload)
+    public async Task<IResultIota> SendAsync(IEmailPayload emailPayload)
     {
         var domain = _settings
             .Domains
@@ -36,12 +40,25 @@ public class SendGridEmailService : IEmailService
         if (emailPayload.Bcc.AnyEmails())
             msg.AddBccs(emailPayload.Bcc.ToEmailList());
 
+        var attachments = await _attachmentStorageService
+            .GetAttachmentsAsync(emailPayload.EmailPayloadId);
+
+        foreach(var attachment in attachments)
+            await msg.AddAttachmentAsync(
+                attachment.FileName,
+                new MemoryStream(Convert.FromBase64String(attachment.Base64Content)),
+                attachment.Type,
+                "attachment",
+                null,
+                CancellationToken.None
+                );
+
         var response = await new SendGridClient(domain.ApiKey)
             .SendEmailAsync(msg);
 
         if (response.IsSuccessStatusCode)
-            return (true, string.Empty);
+            return new OkResultIota();
 
-        return (false, await response.Body.ReadAsStringAsync());
+        return new BadResultIota((int)response.StatusCode, await response.Body.ReadAsStringAsync());
     }
 }
