@@ -1,6 +1,4 @@
-﻿using Google.Apis.Auth.AspNetCore3;
-
-namespace NetSendGridEmailClient.Web.Controllers;
+﻿namespace NetSendGridEmailClient.Web.Controllers;
 
 public class HomeController : Controller
 {

@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using Google.Apis.Auth.AspNetCore3;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Caching.Memory;
 using NetSendGridEmailClient.Interface;
