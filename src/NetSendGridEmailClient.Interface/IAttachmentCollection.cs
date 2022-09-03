@@ -1,8 +1,10 @@
-﻿namespace NetSendGridEmailClient.Interface;
+﻿using NetSendGridEmailClient.Functions;
+
+namespace NetSendGridEmailClient.Interface;
 
 public interface IAttachmentCollection
 {
-    public void Add(IAttachment attachment);
+    public IResultIota Add(IAttachment attachment);
 
     public void Remove(Guid attachmentId);
 

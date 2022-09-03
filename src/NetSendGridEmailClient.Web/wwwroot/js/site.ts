@@ -1,4 +1,17 @@
-﻿
+﻿interface AttachmentName {
+    fileName: string;
+    attachmentId: string;
+}
+
+interface DomainModel {
+    domain: string;
+    defaultUser: string;
+}
+
+interface ResultIota {
+    messages: string[];
+}
+
 function addRecipientField(recipientType: string) {
 
     const newIndex = document
@@ -76,10 +89,7 @@ async function domainChanged(
     tryUpdateHtmlInputValue(senderNameInputId, domain[0].defaultUser);
 }
 
-interface DomainModel {
-    domain: string;
-    defaultUser: string;
-}
+
 
 async function attachmentChanged(
     sender: HTMLInputElement,
@@ -103,17 +113,10 @@ async function attachmentChanged(
 
     resetFileInput(sender);
 
-    if (!response.ok) {
-        switch (response.status) {
-            case 413:
-                alert("File is too large. Limit is 20MB.");
-                break;
-            default:
-                console.log('Response status', response.status);
-                alert("File uploaded failed. See console for error details.");
-        }
-
-        console.log('Error response', response);
+    if (!response.ok)
+    {
+        const details: ResultIota = await response.json();
+        alert(details.messages.join('\n'));
         return;
     }
 
@@ -189,8 +192,4 @@ async function removeAttachment(emailPayloadId: string, attachmentId: string)
     });
 }
 
-interface AttachmentName {
-    fileName: string;
-    attachmentId: string;
-}
 

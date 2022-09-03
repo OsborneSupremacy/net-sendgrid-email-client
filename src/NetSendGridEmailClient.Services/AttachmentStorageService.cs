@@ -1,7 +1,4 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Logging;
-using NetSendGridEmailClient.Interface;
-using NetSendGridEmailClient.Models;
 
 namespace NetSendGridEmailClient.Services;
 
@@ -10,7 +7,7 @@ public class AttachmentStorageService : IAttachmentStorageService
     private readonly ILogger<AttachmentStorageService> _logger;
 
     private readonly IMemoryCache _memoryCache;
-    
+
     public AttachmentStorageService(
         ILogger<AttachmentStorageService> logger,
         IMemoryCache memoryCache
@@ -28,29 +25,26 @@ public class AttachmentStorageService : IAttachmentStorageService
         return Task.FromResult(Enumerable.Empty<IAttachment>().ToList() as IList<IAttachment>);
     }
 
-    public Task SaveAttachmentAsync(Guid emailPayloadId, IAttachment attachment)
+    public Task<IResultIota> SaveAttachmentAsync(Guid emailPayloadId, IAttachment attachment)
     {
-        if(_memoryCache.TryGetValue<IAttachmentCollection>(emailPayloadId, out var attachmentCollection))
-        {
-            attachmentCollection.Add(attachment);
-            return Task.CompletedTask;
-        };
+        if (_memoryCache.TryGetValue<IAttachmentCollection>(emailPayloadId, out var attachmentCollection))
+            return Task.FromResult(attachmentCollection.Add(attachment));
 
         attachmentCollection = new AttachmentCollection();
         attachmentCollection.Add(attachment);
 
         _memoryCache.Set(emailPayloadId, attachmentCollection);
 
-        return Task.CompletedTask;
+        return Task.FromResult(new OkResultIota() as IResultIota);
     }
 
-    public Task RemoveAttachmentAsync(Guid emailPayloadId, Guid attachmentId)
+    public Task<IResultIota> RemoveAttachmentAsync(Guid emailPayloadId, Guid attachmentId)
     {
         if (!_memoryCache.TryGetValue<IAttachmentCollection>(emailPayloadId, out var attachmentCollection))
-            return Task.CompletedTask;
+            return Task.FromResult(new OkResultIota() as IResultIota);
 
         attachmentCollection.Remove(attachmentId);
 
-        return Task.CompletedTask;
+        return Task.FromResult(new OkResultIota() as IResultIota);
     }
 }

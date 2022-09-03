@@ -1,5 +1,4 @@
 ﻿using Markdig;
-using NetSendGridEmailClient.Interface;
 
 namespace NetSendGridEmailClient.Services;
 

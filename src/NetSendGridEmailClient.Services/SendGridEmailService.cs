@@ -1,7 +1,4 @@
-﻿using NetSendGridEmailClient.Functions;
-using NetSendGridEmailClient.Models;
-using NetSendGridEmailClient.Interface;
-using SendGrid;
+﻿using SendGrid;
 using SendGrid.Helpers.Mail;
 
 namespace NetSendGridEmailClient.Services;

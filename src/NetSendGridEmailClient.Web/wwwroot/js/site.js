@@ -67,15 +67,8 @@ async function attachmentChanged(sender, emailPayloadId, uploadedAttachmentsCont
     });
     resetFileInput(sender);
     if (!response.ok) {
-        switch (response.status) {
-            case 413:
-                alert("File is too large. Limit is 20MB.");
-                break;
-            default:
-                console.log('Response status', response.status);
-                alert("File uploaded failed. See console for error details.");
-        }
-        console.log('Error response', response);
+        const details = await response.json();
+        alert(details.messages.join('\n'));
         return;
     }
     await getAndListAttachments(emailPayloadId, uploadedAttachmentsContainerName);
