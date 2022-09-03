@@ -56,6 +56,7 @@ builder.Services.AddSingleton(sendGridSettings);
 
 builder.Services.AddSingleton<IMarkdownService, MarkdownService>();
 builder.Services.AddSingleton<IAttachmentStorageService, AttachmentStorageService>();
+builder.Services.AddSingleton<IEmailStagingService, EmailStagingService>();
 builder.Services.AddScoped<IEmailService, SendGridEmailService>();
 
 builder.Services.AddSingleton<IMemoryCache, MemoryCache>();

@@ -9,49 +9,26 @@ public class SendGridEmailService : IEmailService
 
     private readonly IAttachmentStorageService _attachmentStorageService;
 
+    private readonly IEmailStagingService _emailStagingService;
+
     public SendGridEmailService(
         SendGridSettings settings,
-        IAttachmentStorageService attachmentStorageService
-        )
+        IAttachmentStorageService attachmentStorageService,
+        IEmailStagingService emailStagingService)
     {
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
         _attachmentStorageService = attachmentStorageService ?? throw new ArgumentNullException(nameof(attachmentStorageService));
+        _emailStagingService = emailStagingService ?? throw new ArgumentNullException(nameof(emailStagingService));
     }
 
     public async Task<IResultIota> SendAsync(IEmailPayload emailPayload)
     {
+        SendGridMessage msg = await _emailStagingService.StageAsync(emailPayload);
+
         var domain = _settings
             .Domains
             .Where(x => x.Domain == emailPayload.FromDomain)
             .Single()!;
-
-        SendGridMessage msg = new()
-        {
-            From = emailPayload.FromAddress.ToEmail(),
-            Subject = emailPayload.Subject ?? string.Empty,
-            HtmlContent = emailPayload.HtmlBody
-        };
-
-        msg.AddTos(emailPayload.To.ToEmailList());
-
-        if (emailPayload.Cc.AnyEmails())
-            msg.AddCcs(emailPayload.Cc.ToEmailList());
-
-        if (emailPayload.Bcc.AnyEmails())
-            msg.AddBccs(emailPayload.Bcc.ToEmailList());
-
-        var attachments = await _attachmentStorageService
-            .GetAttachmentsAsync(emailPayload.EmailPayloadId);
-
-        foreach(var attachment in attachments)
-            await msg.AddAttachmentAsync(
-                attachment.FileName,
-                new MemoryStream(Convert.FromBase64String(attachment.Base64Content)),
-                attachment.Type,
-                "attachment",
-                null,
-                CancellationToken.None
-                );
 
         var response = await new SendGridClient(domain.ApiKey)
             .SendEmailAsync(msg);
