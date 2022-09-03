@@ -47,4 +47,14 @@ public class AttachmentStorageService : IAttachmentStorageService
 
         return Task.FromResult(new OkResultIota() as IResultIota);
     }
+
+    public Task<IResultIota> RemoveAllAsync(Guid emailPayloadId)
+    {
+        if (!_memoryCache.TryGetValue<IAttachmentCollection>(emailPayloadId, out _))
+            return Task.FromResult(new OkResultIota() as IResultIota);
+
+        _memoryCache.Remove(emailPayloadId);
+
+        return Task.FromResult(new OkResultIota() as IResultIota);
+    }
 }

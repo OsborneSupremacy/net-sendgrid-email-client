@@ -9,4 +9,6 @@ public interface IAttachmentStorageService
     public Task<IList<IAttachment>> GetAttachmentsAsync(Guid emailPayloadId);
 
     public Task<IResultIota> RemoveAttachmentAsync(Guid emailPayloadId, Guid attachmentId);
+
+    public Task<IResultIota> RemoveAllAsync(Guid emailPayloadId);
 }

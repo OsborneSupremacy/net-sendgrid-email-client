@@ -7,11 +7,11 @@ public class SendGridEmailService : IEmailService
 {
     private readonly SendGridSettings _settings;
 
-    private readonly AttachmentStorageService _attachmentStorageService;
+    private readonly IAttachmentStorageService _attachmentStorageService;
 
     public SendGridEmailService(
         SendGridSettings settings,
-        AttachmentStorageService attachmentStorageService
+        IAttachmentStorageService attachmentStorageService
         )
     {
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
@@ -56,9 +56,12 @@ public class SendGridEmailService : IEmailService
         var response = await new SendGridClient(domain.ApiKey)
             .SendEmailAsync(msg);
 
-        if (response.IsSuccessStatusCode)
-            return new OkResultIota();
+        if (!response.IsSuccessStatusCode)
+            return new BadResultIota((int)response.StatusCode, await response.Body.ReadAsStringAsync());
 
-        return new BadResultIota((int)response.StatusCode, await response.Body.ReadAsStringAsync());
+        await _attachmentStorageService
+            .RemoveAllAsync(emailPayload.EmailPayloadId);
+
+        return new OkResultIota();
     }
 }
