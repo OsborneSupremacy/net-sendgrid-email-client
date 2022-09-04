@@ -33,7 +33,12 @@ public class AttachmentStorageService : IAttachmentStorageService
         attachmentCollection = new AttachmentCollection();
         attachmentCollection.Add(attachment);
 
-        _memoryCache.Set(emailPayloadId, attachmentCollection);
+        _memoryCache.Set(emailPayloadId, attachmentCollection,
+            new MemoryCacheEntryOptions
+            {
+                SlidingExpiration = TimeSpan.FromHours(2)
+            }
+        );
 
         return Task.FromResult(new OkResultIota() as IResultIota);
     }
