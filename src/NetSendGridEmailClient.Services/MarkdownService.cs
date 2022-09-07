@@ -2,6 +2,8 @@
 
 namespace NetSendGridEmailClient.Services;
 
+[ServiceLifetime(ServiceLifetime.Singleton)]
+[RegistrationTarget(typeof(IMarkdownService))]
 public class MarkdownService : IMarkdownService
 {
     public string RenderHtml(string input)

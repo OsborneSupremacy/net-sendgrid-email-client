@@ -2,6 +2,8 @@
 
 namespace NetSendGridEmailClient.Services;
 
+[ServiceLifetime(ServiceLifetime.Singleton)]
+[RegistrationTarget(typeof(IEmailStagingService))]
 public class EmailStagingService : IEmailStagingService
 {
     private readonly SendGridSettings _settings;

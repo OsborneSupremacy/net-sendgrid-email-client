@@ -3,6 +3,8 @@ using SendGrid.Helpers.Mail;
 
 namespace NetSendGridEmailClient.Services;
 
+[ServiceLifetime(ServiceLifetime.Singleton)]
+[RegistrationTarget(typeof(IEmailService))]
 public class SendGridEmailService : IEmailService
 {
     private readonly SendGridSettings _settings;

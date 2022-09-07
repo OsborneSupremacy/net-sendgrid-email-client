@@ -53,13 +53,8 @@ SendGridSettings sendGridSettings = new();
 configuration.GetSection("SendGrid").Bind(sendGridSettings);
 builder.Services.AddSingleton(sendGridSettings);
 
-builder.Services.AddSingleton<IMarkdownService, MarkdownService>();
-builder.Services.AddSingleton<IAttachmentStorageService, AttachmentStorageService>();
-builder.Services.AddSingleton<IEmailStagingService, EmailStagingService>();
-builder.Services.AddScoped<IEmailService, SendGridEmailService>();
-builder.Services.AddSingleton<IEmailRegistrationService, EmailRegistrationService>();
-
 builder.Services.AddSingleton<IMemoryCache, MemoryCache>();
+builder.Services.RegisterServicesInAssembly(typeof(SendGridEmailService));
 
 var app = builder.Build();
 

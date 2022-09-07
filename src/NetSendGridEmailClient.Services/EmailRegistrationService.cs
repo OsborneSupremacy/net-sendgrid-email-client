@@ -2,6 +2,8 @@
 
 namespace NetSendGridEmailClient.Services;
 
+[ServiceLifetime(ServiceLifetime.Singleton)]
+[RegistrationTarget(typeof(IEmailRegistrationService))]
 public class EmailRegistrationService : IEmailRegistrationService
 {
     private readonly ILogger<AttachmentStorageService> _logger;
