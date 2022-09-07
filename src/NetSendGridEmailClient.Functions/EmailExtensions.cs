@@ -12,7 +12,7 @@ public static class EmailExtensions
     public static List<EmailAddress> ToEmailList(this IList<string> input) =>
         input
             .Where(x => !string.IsNullOrWhiteSpace(x))
-            .Select(x => new EmailAddress(x))
+            .Select(x =>  x.ToEmail())
             .ToList();
 
     public static EmailAddress ToEmail(this string input) =>
