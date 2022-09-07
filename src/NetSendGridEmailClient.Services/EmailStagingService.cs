@@ -10,13 +10,17 @@ public class EmailStagingService : IEmailStagingService
 
     private readonly IAttachmentStorageService _attachmentStorageService;
 
+    private readonly IAttachmentAdapter _attachmentAdapter;
+
     public EmailStagingService(
         SendGridSettings settings,
-        IAttachmentStorageService attachmentStorageService
+        IAttachmentStorageService attachmentStorageService,
+        IAttachmentAdapter attachmentAdapter
         )
     {
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
         _attachmentStorageService = attachmentStorageService ?? throw new ArgumentNullException(nameof(attachmentStorageService));
+        _attachmentAdapter = attachmentAdapter ?? throw new ArgumentNullException(nameof(attachmentAdapter));
     }
 
     public async Task<SendGridMessage> StageAsync(IEmailPayload emailPayload)
@@ -41,18 +45,10 @@ public class EmailStagingService : IEmailStagingService
         if (emailPayload.Bcc.AnyEmails())
             msg.AddBccs(emailPayload.Bcc.ToEmailList());
 
-        var attachments = await _attachmentStorageService
-            .GetAttachmentsAsync(emailPayload.EmailPayloadId);
-
-        foreach (var attachment in attachments)
-            await msg.AddAttachmentAsync(
-                attachment.FileName,
-                new MemoryStream(Convert.FromBase64String(attachment.Base64Content)),
-                attachment.Type,
-                "attachment",
-                null,
-                CancellationToken.None
-                );
+        await _attachmentAdapter.AddAsync(msg,
+            await _attachmentStorageService
+                .GetAttachmentsAsync(emailPayload.EmailPayloadId)
+        );
 
         return msg;
     }
