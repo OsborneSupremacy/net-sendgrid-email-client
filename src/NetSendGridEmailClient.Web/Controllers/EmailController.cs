@@ -13,6 +13,8 @@ public class EmailController : Controller
 
     private readonly EmailPayloadValidator _emailPayloadValidator;
 
+    private readonly IEmailPayloadFactory _emailPayloadFactory;
+
     private readonly IEmailService _emailService;
 
     private readonly IMarkdownService _markdownService;
@@ -21,6 +23,7 @@ public class EmailController : Controller
         ILogger<EmailController> logger,
         SendGridSettings sendGridSettings,
         EmailPayloadValidator emailPayloadValidator,
+        IEmailPayloadFactory emailPayloadFactory,
         IEmailService emailService,
         IMarkdownService markdownService
         )
@@ -28,6 +31,7 @@ public class EmailController : Controller
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _sendGridSettings = sendGridSettings ?? throw new ArgumentNullException(nameof(sendGridSettings));
         _emailPayloadValidator = emailPayloadValidator ?? throw new ArgumentNullException(nameof(emailPayloadValidator));
+        _emailPayloadFactory = emailPayloadFactory ?? throw new ArgumentNullException(nameof(emailPayloadFactory));
         _emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
         _markdownService = markdownService ?? throw new ArgumentNullException(nameof(markdownService));
     }
@@ -42,21 +46,8 @@ public class EmailController : Controller
         return View("Index", model);
     }
 
-    public IActionResult Index()
-    {
-        EmailPayload model = new()
-        {
-            EmailPayloadId = Guid.NewGuid(),
-            To = new List<string>() { string.Empty },
-            Cc = new List<string>() { string.Empty },
-            Bcc = new List<string>() { string.Empty },
-            FromName = _sendGridSettings.Domains.First().DefaultUser,
-            FromDomain = _sendGridSettings.Domains.First().Domain,
-            Body = string.Empty
-        };
-
-        return SendToEditor(model);
-    }
+    public IActionResult Index() =>
+        SendToEditor(_emailPayloadFactory.New<EmailPayload>());
 
     [HttpPost]
     [ValidateAntiForgeryToken]

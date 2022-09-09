@@ -1,6 +1,4 @@
-﻿using SendGrid.Helpers.Mail;
-
-namespace NetSendGridEmailClient.Services;
+﻿namespace NetSendGridEmailClient.Services;
 
 [ServiceLifetime(ServiceLifetime.Singleton)]
 [RegistrationTarget(typeof(IEmailStagingService))]
