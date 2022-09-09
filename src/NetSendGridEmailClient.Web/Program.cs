@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Caching.Memory;
-using NetSendGridEmailClient.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -54,7 +53,7 @@ configuration.GetSection("SendGrid").Bind(sendGridSettings);
 builder.Services.AddSingleton(sendGridSettings);
 
 builder.Services.AddSingleton<IMemoryCache, MemoryCache>();
-builder.Services.RegisterServicesInAssembly(typeof(SendGridEmailService));
+builder.Services.RegisterServicesInAssembly(typeof(SendGridEmailService)); 
 
 var app = builder.Build();
 

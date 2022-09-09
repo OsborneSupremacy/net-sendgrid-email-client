@@ -17,15 +17,12 @@ public class EmailController : Controller
 
     private readonly IMarkdownService _markdownService;
 
-    private readonly IEmailRegistrationService _emailRegistrationService;
-
     public EmailController(
         ILogger<EmailController> logger,
         SendGridSettings sendGridSettings,
         EmailPayloadValidator emailPayloadValidator,
         IEmailService emailService,
-        IMarkdownService markdownService,
-        IEmailRegistrationService emailRegistrationService
+        IMarkdownService markdownService
         )
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -33,7 +30,6 @@ public class EmailController : Controller
         _emailPayloadValidator = emailPayloadValidator ?? throw new ArgumentNullException(nameof(emailPayloadValidator));
         _emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
         _markdownService = markdownService ?? throw new ArgumentNullException(nameof(markdownService));
-        _emailRegistrationService = emailRegistrationService ?? throw new ArgumentNullException(nameof(emailRegistrationService));
     }
 
     protected IActionResult SendToEditor(EmailPayload model)
@@ -94,11 +90,6 @@ public class EmailController : Controller
         if (!ModelState.IsValid)
             return SendToEditor(model);
 
-        // see if email has already been sent
-        var emailSent = _emailRegistrationService.HasEmailBeenSent(model.EmailPayloadId);
-        if (emailSent.result)
-            return View("PreviouslySent", emailSent.timeSent);
-
         var result = await _emailService.SendAsync(model);
 
         if(!result.Success)
@@ -107,8 +98,6 @@ public class EmailController : Controller
                 ModelState.AddModelError("SendGrid", message);
             return SendToEditor(model);
         }
-
-        _emailRegistrationService.RegisterSentEmail(model.EmailPayloadId);
 
         return View("Sent");
     }
