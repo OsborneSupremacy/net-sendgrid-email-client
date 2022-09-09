@@ -54,15 +54,10 @@ public class AttachmentController : Controller
     [HttpGet]
     [Produces("application/json")]
     [ProducesResponseType(typeof(IList<IAttachment>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAllNames(string emailPayloadId)
+    public async Task<IActionResult> GetAllNames(Guid emailPayloadId)
     {
-        IList<IAttachment> result;
-
-        if (!Guid.TryParse(emailPayloadId, out var emailPayloadId2))
-            result = new List<IAttachment>();
-        else
-            result = await _attachmentStorageService
-                .GetAttachmentsAsync(emailPayloadId2);
+        var result = await _attachmentStorageService
+            .GetAttachmentsAsync(emailPayloadId);
 
         return new OkObjectResult(
             result.Select(x => new { x.FileName, x.AttachmentId })
