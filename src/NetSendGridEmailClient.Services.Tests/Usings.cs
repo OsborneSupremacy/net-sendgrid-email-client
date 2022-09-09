@@ -1,1 +1,11 @@
-global using Xunit;
+﻿global using Xunit;
+global using FluentAssertions;
+global using NetSendGridEmailClient.Interface;
+global using NetSendGridEmailClient.Models;
+global using System;
+global using System.Collections.Generic;
+global using System.Linq;
+global using System.Threading.Tasks;
+global using AutoFixture;
+global using AutoFixture.AutoMoq;
+global using Moq;

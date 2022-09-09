@@ -43,9 +43,14 @@ public class EmailStagingService : IEmailStagingService
         if (emailPayload.Bcc.AnyEmails())
             msg.AddBccs(emailPayload.Bcc.ToEmailList());
 
-        await _attachmentAdapter.AddAsync(msg,
-            await _attachmentStorageService
-                .GetAttachmentsAsync(emailPayload.EmailPayloadId)
+        await _attachmentAdapter.AddAsync
+        (
+            msg,
+            (
+                await _attachmentStorageService
+                    .GetAttachmentCollectionAsync(emailPayload.EmailPayloadId)
+            )
+            .GetAll()
         );
 
         return msg;

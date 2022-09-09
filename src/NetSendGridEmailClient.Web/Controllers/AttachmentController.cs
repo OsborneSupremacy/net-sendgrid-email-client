@@ -57,10 +57,12 @@ public class AttachmentController : Controller
     public async Task<IActionResult> GetAllNames(Guid emailPayloadId)
     {
         var result = await _attachmentStorageService
-            .GetAttachmentsAsync(emailPayloadId);
+            .GetAttachmentCollectionAsync(emailPayloadId);
 
         return new OkObjectResult(
-            result.Select(x => new { x.FileName, x.AttachmentId })
+            result
+                .GetAll()
+                .Select(x => new { x.FileName, x.AttachmentId })
         );
     }
 }

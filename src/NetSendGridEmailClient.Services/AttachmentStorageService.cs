@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-
-namespace NetSendGridEmailClient.Services;
+﻿namespace NetSendGridEmailClient.Services;
 
 [ServiceLifetime(ServiceLifetime.Singleton)]
 [RegistrationTarget(typeof(IAttachmentStorageService))]
@@ -8,60 +6,41 @@ public class AttachmentStorageService : IAttachmentStorageService
 {
     private readonly ILogger<AttachmentStorageService> _logger;
 
-    private readonly IMemoryCache _memoryCache;
+    private readonly IMemoryCacheAdapter _memoryCacheAdapter;
 
-    public AttachmentStorageService(
-        ILogger<AttachmentStorageService> logger,
-        IMemoryCache memoryCache
-        )
+    public AttachmentStorageService(ILogger<AttachmentStorageService> logger, IMemoryCacheAdapter memoryCacheAdapter)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
+        _memoryCacheAdapter = memoryCacheAdapter ?? throw new ArgumentNullException(nameof(memoryCacheAdapter));
     }
 
-    public Task<IList<IAttachment>> GetAttachmentsAsync(Guid emailPayloadId)
-    {
-        if (_memoryCache.TryGetValue<IAttachmentCollection>(emailPayloadId, out var attachmentCollection))
-            return Task.FromResult(attachmentCollection.GetAll());
+    private IAttachmentCollection GetAttachmentCollection(Guid emailPayloadId) =>
+        _memoryCacheAdapter
+            .GetOrCreate<AttachmentCollection>(emailPayloadId, new()
+            {
+                SlidingExpiration = TimeSpan.FromHours(2)
+            });
 
-        return Task.FromResult(Enumerable.Empty<IAttachment>().ToList() as IList<IAttachment>);
-    }
+    public Task<IAttachmentCollection> GetAttachmentCollectionAsync(Guid emailPayloadId) =>
+        Task.FromResult(GetAttachmentCollection(emailPayloadId));
 
     public Task<IResultIota> SaveAttachmentAsync(Guid emailPayloadId, IAttachment attachment)
     {
-        if (_memoryCache.TryGetValue<IAttachmentCollection>(emailPayloadId, out var attachmentCollection))
-            return Task.FromResult(attachmentCollection.Add(attachment));
-
-        attachmentCollection = new AttachmentCollection();
+        var attachmentCollection = GetAttachmentCollection(emailPayloadId);
         attachmentCollection.Add(attachment);
-
-        _memoryCache.Set(emailPayloadId, attachmentCollection,
-            new MemoryCacheEntryOptions
-            {
-                SlidingExpiration = TimeSpan.FromHours(2)
-            }
-        );
-
         return Task.FromResult(new OkResultIota() as IResultIota);
     }
 
     public Task<IResultIota> RemoveAttachmentAsync(Guid emailPayloadId, Guid attachmentId)
     {
-        if (!_memoryCache.TryGetValue<IAttachmentCollection>(emailPayloadId, out var attachmentCollection))
-            return Task.FromResult(new OkResultIota() as IResultIota);
-
+        var attachmentCollection = GetAttachmentCollection(emailPayloadId);
         attachmentCollection.Remove(attachmentId);
-
         return Task.FromResult(new OkResultIota() as IResultIota);
     }
 
     public Task<IResultIota> RemoveAllAsync(Guid emailPayloadId)
     {
-        if (!_memoryCache.TryGetValue<IAttachmentCollection>(emailPayloadId, out _))
-            return Task.FromResult(new OkResultIota() as IResultIota);
-
-        _memoryCache.Remove(emailPayloadId);
-
+        _memoryCacheAdapter.Remove(emailPayloadId);
         return Task.FromResult(new OkResultIota() as IResultIota);
     }
 }

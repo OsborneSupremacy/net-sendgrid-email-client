@@ -6,7 +6,7 @@ public interface IAttachmentStorageService
 {
     public Task<IResultIota> SaveAttachmentAsync(Guid emailPayloadId, IAttachment attachment);
 
-    public Task<IList<IAttachment>> GetAttachmentsAsync(Guid emailPayloadId);
+    public Task<IAttachmentCollection> GetAttachmentCollectionAsync(Guid emailPayloadId);
 
     public Task<IResultIota> RemoveAttachmentAsync(Guid emailPayloadId, Guid attachmentId);
 

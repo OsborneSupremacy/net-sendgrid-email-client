@@ -1,7 +1,4 @@
-﻿using FluentAssertions;
-using NetSendGridEmailClient.Interface;
-using NetSendGridEmailClient.Models;
-using SendGrid.Helpers.Mail;
+﻿using SendGrid.Helpers.Mail;
 
 namespace NetSendGridEmailClient.Services.Tests;
 
