@@ -51,7 +51,7 @@ public class EmailExtensionsTests
         // arrange
         List<string> input = new() { "", "hey@you.com", "hey@you.org" };
 
-        List<EmailAddress> expectedResult = new() { 
+        List<EmailAddress> expectedResult = new() {
             new EmailAddress("hey@you.com"),
             new EmailAddress("hey@you.org")
         };

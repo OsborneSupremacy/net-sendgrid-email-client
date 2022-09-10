@@ -1,21 +1,24 @@
-﻿namespace NetSendGridEmailClient.Services;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace NetSendGridEmailClient.Services;
+
+[ExcludeFromCodeCoverage]
 [ServiceLifetime(ServiceLifetime.Singleton)]
 [RegistrationTarget(typeof(IAttachmentStorageService))]
 public class AttachmentStorageService : IAttachmentStorageService
 {
     private readonly ILogger<AttachmentStorageService> _logger;
 
-    private readonly IMemoryCacheAdapter _memoryCacheAdapter;
+    private readonly IMemoryCacheFacade _memoryCacheFacade;
 
-    public AttachmentStorageService(ILogger<AttachmentStorageService> logger, IMemoryCacheAdapter memoryCacheAdapter)
+    public AttachmentStorageService(ILogger<AttachmentStorageService> logger, IMemoryCacheFacade memoryCacheFacade)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _memoryCacheAdapter = memoryCacheAdapter ?? throw new ArgumentNullException(nameof(memoryCacheAdapter));
+        _memoryCacheFacade = memoryCacheFacade ?? throw new ArgumentNullException(nameof(memoryCacheFacade));
     }
 
     private IAttachmentCollection GetAttachmentCollection(Guid emailPayloadId) =>
-        _memoryCacheAdapter
+        _memoryCacheFacade
             .GetOrCreate<AttachmentCollection>(emailPayloadId, new()
             {
                 SlidingExpiration = TimeSpan.FromHours(2)
@@ -40,7 +43,7 @@ public class AttachmentStorageService : IAttachmentStorageService
 
     public Task<IResultIota> RemoveAllAsync(Guid emailPayloadId)
     {
-        _memoryCacheAdapter.Remove(emailPayloadId);
+        _memoryCacheFacade.Remove(emailPayloadId);
         return Task.FromResult(new OkResultIota() as IResultIota);
     }
 }

@@ -53,7 +53,7 @@ configuration.GetSection("SendGrid").Bind(sendGridSettings);
 builder.Services.AddSingleton(sendGridSettings);
 
 builder.Services.AddSingleton<IMemoryCache, MemoryCache>();
-builder.Services.RegisterServicesInAssembly(typeof(SendGridEmailService)); 
+builder.Services.RegisterServicesInAssembly(typeof(SendGridEmailService));
 
 var app = builder.Build();
 

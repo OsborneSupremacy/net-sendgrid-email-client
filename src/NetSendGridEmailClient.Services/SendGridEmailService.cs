@@ -3,7 +3,8 @@
 namespace NetSendGridEmailClient.Services;
 
 [ServiceLifetime(ServiceLifetime.Singleton)]
-public class SendGridEmailService : IEmailService
+[RegistrationTarget(typeof(ISendGridEmailService))]
+public class SendGridEmailService : IEmailService, ISendGridEmailService
 {
     private readonly SendGridSettings _settings;
 

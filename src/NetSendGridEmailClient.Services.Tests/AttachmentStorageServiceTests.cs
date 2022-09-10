@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Microsoft.Extensions.Caching.Memory;
-using Xunit.Sdk;
+﻿using Microsoft.Extensions.Caching.Memory;
 
 namespace NetSendGridEmailClient.Services.Tests;
 
@@ -17,7 +15,7 @@ public class AttachmentStorageServiceTests : TestBase
         for (int i = 0; i < 10; i++)
             attachmentCollection.Add(Fixture.Create<StoredAttachment>());
 
-        Fixture.Freeze<Mock<IMemoryCacheAdapter>>()
+        Fixture.Freeze<Mock<IMemoryCacheFacade>>()
             .Setup(x => x.GetOrCreate<AttachmentCollection>(emailPayloadId, It.IsAny<MemoryCacheEntryOptions>()))
             .Returns(attachmentCollection);
 
@@ -38,7 +36,7 @@ public class AttachmentStorageServiceTests : TestBase
 
         var attachmentCollection = new AttachmentCollection();
 
-        Fixture.Freeze<Mock<IMemoryCacheAdapter>>()
+        Fixture.Freeze<Mock<IMemoryCacheFacade>>()
             .Setup(x => x.GetOrCreate<AttachmentCollection>(emailPayloadId, It.IsAny<MemoryCacheEntryOptions>()))
             .Returns(attachmentCollection);
 
@@ -67,7 +65,7 @@ public class AttachmentStorageServiceTests : TestBase
         var attachmentCollection = new AttachmentCollection();
         attachmentCollection.Add(attachmentToRemove);
 
-        Fixture.Freeze<Mock<IMemoryCacheAdapter>>()
+        Fixture.Freeze<Mock<IMemoryCacheFacade>>()
             .Setup(x => x.GetOrCreate<AttachmentCollection>(emailPayloadId, It.IsAny<MemoryCacheEntryOptions>()))
             .Returns(attachmentCollection);
 
@@ -97,7 +95,7 @@ public class AttachmentStorageServiceTests : TestBase
         attachmentCollection.Add(attachmentToRemove);
         attachmentCollection.Add(unaffectedAttachment);
 
-        Fixture.Freeze<Mock<IMemoryCacheAdapter>>()
+        Fixture.Freeze<Mock<IMemoryCacheFacade>>()
             .Setup(x => x.GetOrCreate<AttachmentCollection>(emailPayloadId, It.IsAny<MemoryCacheEntryOptions>()))
             .Returns(attachmentCollection);
 

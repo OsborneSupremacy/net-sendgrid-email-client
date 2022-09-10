@@ -6,7 +6,7 @@ public class AttachmentAdapter : IAttachmentAdapter
 {
     public Task AddAsync(SendGridMessage msg, IAttachment attachment)
     {
-        using var contentStream = 
+        using var contentStream =
             new MemoryStream(Convert.FromBase64String(attachment.Base64Content));
 
         return msg.AddAttachmentAsync(

@@ -11,9 +11,9 @@ public abstract class TestBase
     {
         Fixture = new Fixture()
             .Customize(
-                new AutoMoqCustomization() 
-                { 
-                    ConfigureMembers = true, 
+                new AutoMoqCustomization()
+                {
+                    ConfigureMembers = true,
                     GenerateDelegates = true
                 }
             );
