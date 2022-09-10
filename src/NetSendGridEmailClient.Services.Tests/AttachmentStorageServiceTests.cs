@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Caching.Memory;
+using Xunit.Sdk;
 
 namespace NetSendGridEmailClient.Services.Tests;
 
@@ -53,5 +54,62 @@ public class AttachmentStorageServiceTests : TestBase
         result.Success.Should().BeTrue();
         attachmentCollection.GetAll().Contains(attachment);
         attachmentCollection.GetAll().Should().NotContain(notAddedAttachment);
+    }
+
+    [Fact]
+    public async Task RemoveAttachmentAsync_Should_Remove_Attachment_In_Collection()
+    {
+        // arrange
+        var emailPayloadId = Guid.NewGuid();
+
+        var attachmentToRemove = Fixture.Create<StoredAttachment>();
+
+        var attachmentCollection = new AttachmentCollection();
+        attachmentCollection.Add(attachmentToRemove);
+
+        Fixture.Freeze<Mock<IMemoryCacheAdapter>>()
+            .Setup(x => x.GetOrCreate<AttachmentCollection>(emailPayloadId, It.IsAny<MemoryCacheEntryOptions>()))
+            .Returns(attachmentCollection);
+
+        var sut = Fixture.Create<AttachmentStorageService>();
+
+        // act
+        await sut.RemoveAttachmentAsync(
+            emailPayloadId,
+            attachmentToRemove.AttachmentId
+        );
+
+        // assert
+        attachmentCollection.GetAll().Should().NotContain(attachmentToRemove);
+    }
+
+
+    [Fact]
+    public async Task RemoveAttachmentAsync_Should_Not_Remove_Unaffected_Attachment()
+    {
+        // arrange
+        var emailPayloadId = Guid.NewGuid();
+
+        var attachmentToRemove = Fixture.Create<StoredAttachment>();
+        var unaffectedAttachment = Fixture.Create<StoredAttachment>();
+
+        var attachmentCollection = new AttachmentCollection();
+        attachmentCollection.Add(attachmentToRemove);
+        attachmentCollection.Add(unaffectedAttachment);
+
+        Fixture.Freeze<Mock<IMemoryCacheAdapter>>()
+            .Setup(x => x.GetOrCreate<AttachmentCollection>(emailPayloadId, It.IsAny<MemoryCacheEntryOptions>()))
+            .Returns(attachmentCollection);
+
+        var sut = Fixture.Create<AttachmentStorageService>();
+
+        // act
+        await sut.RemoveAttachmentAsync(
+            emailPayloadId,
+            attachmentToRemove.AttachmentId
+        );
+
+        // assert
+        attachmentCollection.GetAll().Should().Contain(unaffectedAttachment);
     }
 }
