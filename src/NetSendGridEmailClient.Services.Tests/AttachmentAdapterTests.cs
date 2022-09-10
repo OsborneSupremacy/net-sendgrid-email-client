@@ -1,7 +1,9 @@
-﻿using SendGrid.Helpers.Mail;
+﻿using System.Diagnostics.CodeAnalysis;
+using SendGrid.Helpers.Mail;
 
 namespace NetSendGridEmailClient.Services.Tests;
 
+[ExcludeFromCodeCoverage]
 public class AttachmentAdapterTests
 {
     [Fact]
