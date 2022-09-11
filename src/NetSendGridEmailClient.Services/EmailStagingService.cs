@@ -1,4 +1,9 @@
-﻿namespace NetSendGridEmailClient.Services;
+﻿using System.Collections.Generic;
+using NetSendGridEmailClient.Functions;
+using NetSendGridEmailClient.Interface;
+using NetSendGridEmailClient.Models;
+
+namespace NetSendGridEmailClient.Services;
 
 [ServiceLifetime(ServiceLifetime.Singleton)]
 [RegistrationTarget(typeof(IEmailStagingService))]
@@ -35,13 +40,9 @@ public class EmailStagingService : IEmailStagingService
             HtmlContent = emailPayload.HtmlBody
         };
 
-        msg.AddTos(emailPayload.To.ToEmailList());
-
-        if (emailPayload.Cc.AnyEmails())
-            msg.AddCcs(emailPayload.Cc.ToEmailList());
-
-        if (emailPayload.Bcc.AnyEmails())
-            msg.AddBccs(emailPayload.Bcc.ToEmailList());
+        msg.AddTos(emailPayload.To);
+        msg.AddCcs(emailPayload.Cc);
+        msg.AddBccs(emailPayload.Bcc);
 
         await _attachmentAdapter.AddAsync
         (
@@ -52,7 +53,7 @@ public class EmailStagingService : IEmailStagingService
             )
             .GetAll()
         );
-
         return msg;
     }
-}
+
+};
