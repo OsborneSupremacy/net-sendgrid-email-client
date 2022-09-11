@@ -11,29 +11,29 @@ public static class SendGridMessageExtensions
         Bcc
     }
 
-    public static void AddTos(
+    public static SendGridMessage AddTos(
         this SendGridMessage msg,
         IList<string> recipientList) => AddRecipients(msg, recipientList, RecipientType.To);
 
-    public static void AddCcs(
+    public static SendGridMessage AddCcs(
         this SendGridMessage msg,
         IList<string> recipientList) => AddRecipients(msg, recipientList, RecipientType.Cc);
 
-    public static void AddBccs(
+    public static SendGridMessage AddBccs(
         this SendGridMessage msg,
         IList<string> recipientList) => AddRecipients(msg, recipientList, RecipientType.Bcc);
 
-    public static void AddRecipients(
+    public static SendGridMessage AddRecipients(
         this SendGridMessage msg,
         IList<string> recipientList,
         RecipientType recipientType)
     {
         if (!recipientList.AnyEmails())
-            return;
+            return msg;
 
         var emailList = recipientList.ToEmailList();
 
-        switch(recipientType) {
+        switch (recipientType) {
             case RecipientType.Cc:
                 msg.AddCcs(emailList);
                 break;
@@ -44,5 +44,7 @@ public static class SendGridMessageExtensions
                 msg.AddTos(emailList);
                 break;
         }
+
+        return msg;
     }
 }

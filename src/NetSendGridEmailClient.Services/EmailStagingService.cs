@@ -35,9 +35,10 @@ public class EmailStagingService : IEmailStagingService
             HtmlContent = emailPayload.HtmlBody
         };
 
-        msg.AddTos(emailPayload.To);
-        msg.AddCcs(emailPayload.Cc);
-        msg.AddBccs(emailPayload.Bcc);
+        msg
+            .AddTos(emailPayload.To)
+            .AddCcs(emailPayload.Cc)
+            .AddBccs(emailPayload.Bcc);
 
         await _attachmentAdapter.AddAsync
         (
