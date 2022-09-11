@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using SendGrid.Helpers.Mail;
+﻿using SendGrid.Helpers.Mail;
 
 namespace NetSendGridEmailClient.Services.Tests;
 

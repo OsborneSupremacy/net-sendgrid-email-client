@@ -6,11 +6,13 @@ namespace NetSendGridEmailClient.Services;
 [RegistrationTarget(typeof(IMarkdownService))]
 public class MarkdownService : IMarkdownService
 {
-    public string RenderHtml(string input)
+    private readonly MarkdownPipeline markdownPipeline;
+
+    public MarkdownService(MarkdownPipeline markdownPipeline)
     {
-        var pipeline = new MarkdownPipelineBuilder()
-            .UseAdvancedExtensions()
-            .Build();
-        return Markdown.ToHtml(input ?? string.Empty, pipeline);
+        this.markdownPipeline = markdownPipeline ?? throw new ArgumentNullException(nameof(markdownPipeline));
     }
+
+    public string RenderHtml(string input) =>
+        Markdown.ToHtml(input ?? string.Empty, markdownPipeline);
 }

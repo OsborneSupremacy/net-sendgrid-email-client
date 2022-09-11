@@ -1,7 +1,4 @@
-﻿using System.Data.SqlTypes;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
-using NetSendGridEmailClient.Models;
+﻿using Microsoft.Extensions.Caching.Memory;
 
 namespace NetSendGridEmailClient.Services;
 

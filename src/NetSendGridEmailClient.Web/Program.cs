@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Markdig;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -51,6 +52,12 @@ builder.Services.AddAuthorization(options =>
 SendGridSettings sendGridSettings = new();
 configuration.GetSection("SendGrid").Bind(sendGridSettings);
 builder.Services.AddSingleton(sendGridSettings);
+
+var markdownPipeLine = new MarkdownPipelineBuilder()
+    .UseAdvancedExtensions()
+    .Build();
+
+builder.Services.AddSingleton(markdownPipeLine);
 
 builder.Services.AddSingleton<IMemoryCache, MemoryCache>();
 builder.Services.RegisterServicesInAssembly(typeof(SendGridEmailService));

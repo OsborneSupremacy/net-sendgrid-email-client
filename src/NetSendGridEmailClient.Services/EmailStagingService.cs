@@ -1,9 +1,4 @@
-﻿using System.Collections.Generic;
-using NetSendGridEmailClient.Functions;
-using NetSendGridEmailClient.Interface;
-using NetSendGridEmailClient.Models;
-
-namespace NetSendGridEmailClient.Services;
+﻿namespace NetSendGridEmailClient.Services;
 
 [ServiceLifetime(ServiceLifetime.Singleton)]
 [RegistrationTarget(typeof(IEmailStagingService))]

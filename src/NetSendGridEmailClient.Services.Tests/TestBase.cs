@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace NetSendGridEmailClient.Services.Tests;
+﻿namespace NetSendGridEmailClient.Services.Tests;
 
 [ExcludeFromCodeCoverage]
 public abstract class TestBase
