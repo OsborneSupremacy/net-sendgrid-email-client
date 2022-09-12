@@ -32,19 +32,21 @@ public static class SendGridMessageExtensions
             return msg;
 
         var emailList = recipientList.ToEmailList();
-
-        switch (recipientType) {
-            case RecipientType.Cc:
-                msg.AddCcs(emailList);
-                break;
-            case RecipientType.Bcc:
-                msg.AddBccs(emailList);
-                break;
-            default:
-                msg.AddTos(emailList);
-                break;
-        }
-
+        msg.GetRecipientAddDelegate(recipientType)(emailList);
         return msg;
     }
+
+    public static Action<List<EmailAddress>> GetRecipientAddDelegate(
+        this SendGridMessage msg,
+        RecipientType recipientType) =>
+        recipientType switch
+        {
+            RecipientType.To => (List<EmailAddress> emails) => { msg.AddTos(emails); }
+            ,
+            RecipientType.Cc => (List<EmailAddress> emails) => { msg.AddCcs(emails); }
+            ,
+            RecipientType.Bcc => (List<EmailAddress> emails) => { msg.AddBccs(emails); }
+            ,
+            _ => throw new NotSupportedException()
+        };
 }
