@@ -71,9 +71,21 @@
     @Html.HiddenFor(model => model.Subject)
     @Html.HiddenFor(model => model.Body)
     @Html.HiddenFor(model => model.HtmlBody)
-    @Html.HiddenFor(model => model.To)
-    @Html.HiddenFor(model => model.Cc)
-    @Html.HiddenFor(model => model.Bcc)
+
+    @for(int x = 0; x < Model.To.Count; x++)
+    {
+        @Html.HiddenFor(model => model.To[x])
+    }
+
+    @for (int x = 0; x < Model.Cc.Count; x++)
+    {
+        @Html.HiddenFor(model => model.Cc[x])
+    }
+
+    @for (int x = 0; x < Model.Bcc.Count; x++)
+    {
+        @Html.HiddenFor(model => model.Bcc[x])
+    }
 
     <button type="submit" onclick='this.form.action="/Email/Send"' class="btn btn-primary btn-lg">Send</button>
     <button type="submit" onclick='this.form.action="/Email/Compose"' class="btn btn-info btn-sm">Edit</button>
