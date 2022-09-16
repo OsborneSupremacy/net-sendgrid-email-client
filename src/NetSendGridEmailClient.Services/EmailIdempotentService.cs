@@ -22,26 +22,32 @@ public class EmailIdempotentService : IEmailService
         _emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
     }
 
-    public async Task<IResultIota> SendAsync(IEmailPayload emailPayload)
+    public async Task<Result<bool>> SendAsync(IEmailPayload emailPayload)
     {
         var (emailSent, emailSentTime) = _memoryCacheFacade
             .EntryExists<DateTime>(emailPayload.EmailPayloadId);
 
         if (emailSent)
-            return new BadResultIota(StatusCodes.Status429TooManyRequests,
-                $"This email was already sent, at {emailSentTime}. It will not be sent again.");
+            return new Result<bool>(
+                new NotSupportedException($"This email was already sent, at {emailSentTime}. It will not be sent again."));
 
         var result = await _emailService.SendAsync(emailPayload);
 
-        if (!result.Success)
-            return new BadResultIota(StatusCodes.Status400BadRequest, result.Messages);
-
-        _memoryCacheFacade
-            .Set(emailPayload.EmailPayloadId, DateTime.Now, new()
+        return result.Match
+        (
+            success =>
             {
-                SlidingExpiration = TimeSpan.FromHours(2)
-            });
-
-        return new OkResultIota();
+                _memoryCacheFacade
+                  .Set(emailPayload.EmailPayloadId, DateTime.Now, new()
+                  {
+                      SlidingExpiration = TimeSpan.FromHours(2)
+                  });
+                return true;
+            },
+            error =>
+            {
+                return new Result<bool>(error);
+            }
+        );
     }
 }

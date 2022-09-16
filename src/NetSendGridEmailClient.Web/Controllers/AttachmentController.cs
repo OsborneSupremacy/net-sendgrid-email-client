@@ -24,10 +24,10 @@ public class AttachmentController : Controller
     [RequestSizeLimit(20971520)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status413PayloadTooLarge)]
-    public async Task<IResultIota> Upload(Guid emailPayloadId, IFormFile attachment)
+    public async Task<IActionResult> Upload(Guid emailPayloadId, IFormFile attachment)
     {
         if (attachment == null) // will be null when request exceeds limit
-            return new BadResultIota(StatusCodes.Status413PayloadTooLarge, "File is too large. Limit is 20MB.");
+            return StatusCode(StatusCodes.Status413PayloadTooLarge, "File is too large. Limit is 20MB.");
 
         using var ms = new MemoryStream();
         attachment.CopyTo(ms);
@@ -40,16 +40,44 @@ public class AttachmentController : Controller
             attachment.ContentType
         );
 
-        return await _attachmentStorageService
+        var result = await _attachmentStorageService
             .SaveAttachmentAsync(emailPayloadId, storedAttachment);
+
+        return result.Match
+        (
+            success =>
+            {
+                return new OkResult();
+            },
+            error =>
+            {
+                _logger.LogError(error.ToString());
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        );
     }
 
     [HttpPost]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IResultIota> Remove(Guid emailPayloadId, Guid attachmentId) =>
-        await _attachmentStorageService
+    public async Task<IActionResult> Remove(Guid emailPayloadId, Guid attachmentId)
+    {
+        var result = await _attachmentStorageService
             .RemoveAttachmentAsync(emailPayloadId, attachmentId);
+
+        return result.Match
+        (
+            success =>
+            {
+                return new OkResult();
+            },
+            error =>
+            {
+                _logger.LogError(error.ToString());
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        );
+    }
 
     [HttpGet]
     [Produces("application/json")]

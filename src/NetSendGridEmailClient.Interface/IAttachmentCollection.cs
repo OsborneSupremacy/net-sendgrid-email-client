@@ -1,10 +1,10 @@
-﻿using NetSendGridEmailClient.Functions;
+﻿using LanguageExt.Common;
 
 namespace NetSendGridEmailClient.Interface;
 
 public interface IAttachmentCollection
 {
-    public IResultIota Add(IAttachment attachment);
+    public Result<bool> Add(IAttachment attachment);
 
     public void Remove(Guid attachmentId);
 

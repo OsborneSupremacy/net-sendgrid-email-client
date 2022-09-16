@@ -10,3 +10,4 @@ global using Moq;
 global using NetSendGridEmailClient.Interface;
 global using NetSendGridEmailClient.Models;
 global using Xunit;
+global using LanguageExt.Common;

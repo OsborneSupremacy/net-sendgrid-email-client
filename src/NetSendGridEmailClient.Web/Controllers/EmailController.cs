@@ -83,13 +83,17 @@ public class EmailController : Controller
 
         var result = await _emailService.SendAsync(model);
 
-        if (!result.Success)
-        {
-            foreach (var message in result.Messages)
-                ModelState.AddModelError("SendGrid", message);
-            return SendToEditor(model);
-        }
-
-        return View("Sent");
+        return result.Match
+        (
+            success =>
+            {
+                return View("Sent");
+            },
+            error =>
+            {
+                ModelState.AddModelError("SendGrid", error.Message.ToString());
+                return SendToEditor(model);
+            }
+        );
     }
 }

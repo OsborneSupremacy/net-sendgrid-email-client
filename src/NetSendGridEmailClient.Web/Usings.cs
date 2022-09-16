@@ -6,3 +6,4 @@ global using Microsoft.AspNetCore.Mvc;
 global using NetSendGridEmailClient.Functions;
 global using NetSendGridEmailClient.Models;
 global using NetSendGridEmailClient.Services;
+global using LanguageExt.Common;

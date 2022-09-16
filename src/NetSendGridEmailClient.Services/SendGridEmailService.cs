@@ -1,4 +1,5 @@
 ﻿using SendGrid;
+using SendGrid.Helpers.Errors.Model;
 
 namespace NetSendGridEmailClient.Services;
 
@@ -22,7 +23,7 @@ public class SendGridEmailService : IEmailService, ISendGridEmailService
         _emailStagingService = emailStagingService ?? throw new ArgumentNullException(nameof(emailStagingService));
     }
 
-    public async Task<IResultIota> SendAsync(IEmailPayload emailPayload)
+    public async Task<Result<bool>> SendAsync(IEmailPayload emailPayload)
     {
         SendGridMessage msg = await _emailStagingService.StageAsync(emailPayload);
 
@@ -31,15 +32,21 @@ public class SendGridEmailService : IEmailService, ISendGridEmailService
             .Where(x => x.Domain == emailPayload.FromDomain)
             .Single()!;
 
-        var response = await new SendGridClient(domain.ApiKey)
-            .SendEmailAsync(msg);
+        try
+        {
+            var response = await new SendGridClient(domain.ApiKey)
+                .SendEmailAsync(msg);
 
-        if (!response.IsSuccessStatusCode)
-            return new BadResultIota((int)response.StatusCode, await response.Body.ReadAsStringAsync());
+            if (!response.IsSuccessStatusCode)
+                return new Result<bool>(new RequestErrorException(await response.Body.ReadAsStringAsync()));
 
-        await _attachmentStorageService
-            .RemoveAllAsync(emailPayload.EmailPayloadId);
+            await _attachmentStorageService
+                .RemoveAllAsync(emailPayload.EmailPayloadId);
 
-        return new OkResultIota();
+            return true;
+        } catch (Exception ex)
+        {
+            return new Result<bool>(ex);
+        }
     }
 }

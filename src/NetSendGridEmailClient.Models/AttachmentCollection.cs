@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using NetSendGridEmailClient.Functions;
-using NetSendGridEmailClient.Interface;
-
-namespace NetSendGridEmailClient.Models;
+﻿namespace NetSendGridEmailClient.Models;
 
 public class AttachmentCollection : IAttachmentCollection
 {
@@ -17,7 +13,7 @@ public class AttachmentCollection : IAttachmentCollection
         _attachmentDictionary = new();
     }
 
-    public IResultIota Add(IAttachment attachment)
+    public Result<bool> Add(IAttachment attachment)
     {
         var currentSize = _attachmentDictionary
             .Values
@@ -26,11 +22,10 @@ public class AttachmentCollection : IAttachmentCollection
         var newSize = (currentSize + attachment.Base64Content.Length) * Base64toBytesFactor;
 
         if (newSize > MaxAggregateAttachmentSize)
-            return new BadResultIota(StatusCodes.Status413PayloadTooLarge,
-                $"Total file size of attachment would exceed maximum of {newSize} bytes");
+            return new Result<bool>(new NotSupportedException($"Total file size of attachment would exceed maximum of {newSize} bytes"));
 
         _attachmentDictionary.Add(attachment.AttachmentId, attachment);
-        return new OkResultIota();
+        return true;
     }
 
     public IList<IAttachment> GetAll() =>

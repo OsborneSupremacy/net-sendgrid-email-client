@@ -23,8 +23,20 @@ public class EmailIdempotentServiceTests : TestBase
         // act
         var result = await sut.SendAsync(emailPayload);
 
+        var success = result.Match
+        (
+            success =>
+            {
+                return true;
+            },
+            error =>
+            {
+                return false;
+            }
+        );
+
         // assert
-        result.Should().BeOfType<BadResultIota>();
+        success.Should().BeFalse();
         emailService.Verify(x => x.SendAsync(It.IsAny<IEmailPayload>()), Times.Never());
     }
 
@@ -47,8 +59,20 @@ public class EmailIdempotentServiceTests : TestBase
         // act
         var result = await sut.SendAsync(emailPayload);
 
+        var success = result.Match
+        (
+            success =>
+            {
+                return true;
+            },
+            error =>
+            {
+                return false;
+            }
+        );
+
         // assert
-        result.Should().BeOfType<OkResultIota>();
+        success.Should().BeTrue();
         emailService.Verify(x => x.SendAsync(emailPayload), Times.Once());
         memoryCacheFacade
             .Verify(x =>

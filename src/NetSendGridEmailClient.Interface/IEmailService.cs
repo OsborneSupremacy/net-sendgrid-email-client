@@ -1,8 +1,8 @@
-﻿using NetSendGridEmailClient.Functions;
+﻿using LanguageExt.Common;
 
 namespace NetSendGridEmailClient.Interface;
 
 public interface IEmailService
 {
-    Task<IResultIota> SendAsync(IEmailPayload emailPayload);
+    Task<Result<bool>> SendAsync(IEmailPayload emailPayload);
 }
