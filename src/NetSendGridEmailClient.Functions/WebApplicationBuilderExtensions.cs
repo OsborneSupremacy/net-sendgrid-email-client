@@ -23,9 +23,7 @@ public static class WebApplicationBuilderExtensions
         AbstractValidator<T> validator
     ) where T : new()
     {
-        T output = new();
-        input.Configuration.GetSection(sectionName)
-            .Bind(output);
+        var output = input.GetTypedSection<T>(sectionName);
 
         var validationResult = validator.Validate(output);
 
