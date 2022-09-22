@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using FluentValidation;
-using NetSendGridEmailClient.Interface;
 
 namespace NetSendGridEmailClient.Models;
 

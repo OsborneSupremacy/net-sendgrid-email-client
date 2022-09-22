@@ -49,8 +49,8 @@ builder.Services.AddAuthorization(options =>
         policy => policy.RequireClaim(System.Security.Claims.ClaimTypes.Email, authorizationSettings.Admins));
 });
 
-SendGridSettings sendGridSettings = new();
-configuration.GetSection("SendGrid").Bind(sendGridSettings);
+var sendGridSettings = builder
+    .GetAndValidateTypedSection("SendGrid", new SendGridSettingsValidator());
 builder.Services.AddSingleton(sendGridSettings);
 
 var markdownPipeLine = new MarkdownPipelineBuilder()
