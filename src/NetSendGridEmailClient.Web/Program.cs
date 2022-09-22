@@ -40,8 +40,8 @@ builder.Services
         googleOptions.SignedOutCallbackPath = "/Home/SignedOut";
     });
 
-AuthorizationSettings authorizationSettings = new();
-configuration.GetSection("Authorization").Bind(authorizationSettings);
+var authorizationSettings = builder
+    .GetTypedSection<AuthorizationSettings>("Authorization");
 
 builder.Services.AddAuthorization(options =>
 {
