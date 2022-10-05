@@ -7,6 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
+		nuget.config = nuget.config
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -22,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetSendGridEmailClient.Inte
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetSendGridEmailClient.Functions.Tests", "src\NetSendGridEmailClient.Functions.Tests\NetSendGridEmailClient.Functions.Tests.csproj", "{9C4C7A76-A485-4B39-9E53-B00401D0FD81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetSendGridEmailClient.Services.Tests", "src\NetSendGridEmailClient.Services.Tests\NetSendGridEmailClient.Services.Tests.csproj", "{D562DD26-5ECE-403A-8BEA-1165CF293FC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetSendGridEmailClient.Services.Tests", "src\NetSendGridEmailClient.Services.Tests\NetSendGridEmailClient.Services.Tests.csproj", "{D562DD26-5ECE-403A-8BEA-1165CF293FC5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
