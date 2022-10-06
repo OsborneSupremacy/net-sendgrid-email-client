@@ -28,7 +28,11 @@ public static class WebApplicationBuilderExtensions
         var validationResult = validator.Validate(output);
 
         if (!validationResult.IsValid)
-            throw new Exception(string.Join(",", validationResult.Errors));
+            throw new AggregateException(
+                validationResult
+                    .Errors
+                    .Select(x => new ValidationException(x.ErrorMessage))
+            );
 
         return output;
     }

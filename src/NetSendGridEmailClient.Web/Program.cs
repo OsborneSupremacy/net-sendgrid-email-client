@@ -20,6 +20,9 @@ if (!string.IsNullOrWhiteSpace(azureConfigConnectionString))
 builder.Services.AddControllersWithViews();
 builder.Services.AddValidatorsFromAssemblyContaining<EmailPayloadValidator>();
 
+var openIdConnectSettings = builder
+    .GetAndValidateTypedSection("Authentication:Google", new GoogleOpenIdConnectSettingsValidator());
+
 builder.Services
     .AddAuthentication(o =>
     {
@@ -36,9 +39,9 @@ builder.Services
     .AddCookie()
     .AddGoogleOpenIdConnect(googleOptions =>
     {
-        googleOptions.ClientId = configuration["Authentication:Google:ClientId"];
-        googleOptions.ClientSecret = configuration["Authentication:Google:ClientSecret"];
-        googleOptions.SignedOutCallbackPath = "/Home/SignedOut";
+        googleOptions.ClientId = openIdConnectSettings.ClientId;
+        googleOptions.ClientSecret = openIdConnectSettings.ClientSecret;
+        googleOptions.SignedOutCallbackPath = openIdConnectSettings.SignedOutCallbackPath;
     });
 
 var authorizationSettings = builder
