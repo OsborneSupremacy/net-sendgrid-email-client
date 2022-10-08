@@ -68,7 +68,7 @@ async function attachmentChanged(sender, emailPayloadId, uploadedAttachmentsCont
     resetFileInput(sender);
     if (!response.ok) {
         const details = await response.json();
-        alert(details.messages.join('\n'));
+        alert(details);
         return;
     }
     await getAndListAttachments(emailPayloadId, uploadedAttachmentsContainerName);

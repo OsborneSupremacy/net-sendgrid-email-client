@@ -47,12 +47,12 @@ public class AttachmentController : Controller
         (
             success =>
             {
-                return new OkResult();
+                return new OkObjectResult(true);
             },
             error =>
             {
                 _logger.LogError(error.ToString());
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Something went wrong");
             }
         );
     }
