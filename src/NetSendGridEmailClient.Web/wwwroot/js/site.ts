@@ -8,7 +8,7 @@ interface DomainModel {
     defaultUser: string;
 }
 
-function addRecipientField(recipientType: string) {
+function addRecipientField(document: Document, recipientType: string) {
 
     const newIndex = document
         .querySelectorAll(`input[data-recipientType="${recipientType}"]`)
@@ -28,7 +28,7 @@ function addRecipientField(recipientType: string) {
     newDiv.appendChild(newInput);
 
     document
-        .querySelector(`div[data-recipientType="${recipientType}"]`)
+        .querySelector(`div[data-recipientType="${recipientType}"]`)!
         .appendChild(newDiv);
 }
 
@@ -41,8 +41,8 @@ function removeRecipientField(recipientType: string) {
     if (fields.length === 1) return;
 
     document
-        .querySelector(`div[data-recipientType="${recipientType}"]`)
-        .removeChild(fields[fields.length - 1].parentNode);
+        .querySelector(`div[data-recipientType="${recipientType}"]`)!
+        .removeChild(fields[fields.length - 1].parentNode!);
 }
 
 function tryUpdateHtmlElementInnerText(elementId: string, newText: string) {
