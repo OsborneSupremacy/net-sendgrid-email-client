@@ -3,6 +3,7 @@ using Markdig;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Caching.Memory;
 using OsborneSupremacy.Extensions.Net.DependencyInjection;
+using OsborneSupremacy.Extensions.AspNet;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -53,9 +54,13 @@ builder.Services.AddAuthorization(options =>
         policy => policy.RequireClaim(System.Security.Claims.ClaimTypes.Email, authorizationSettings.Admins));
 });
 
-var sendGridSettings = builder
-    .GetAndValidateTypedSection("SendGrid", new SendGridSettingsValidator());
-builder.Services.AddSingleton(sendGridSettings);
+builder
+    .Services
+    .AddSingleton
+    (
+        builder
+            .GetAndValidateTypedSection("SendGrid", new SendGridSettingsValidator())
+    );
 
 var markdownPipeLine = new MarkdownPipelineBuilder()
     .UseAdvancedExtensions()

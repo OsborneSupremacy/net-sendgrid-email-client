@@ -1,4 +1,4 @@
-function addRecipientField(recipientType) {
+function addRecipientField(document, recipientType) {
     const newIndex = document
         .querySelectorAll(`input[data-recipientType="${recipientType}"]`)
         .length;

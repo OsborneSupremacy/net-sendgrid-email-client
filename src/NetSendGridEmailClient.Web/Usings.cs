@@ -7,3 +7,4 @@ global using NetSendGridEmailClient.Functions;
 global using NetSendGridEmailClient.Models;
 global using NetSendGridEmailClient.Services;
 global using LanguageExt.Common;
+
