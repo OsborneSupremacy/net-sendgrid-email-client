@@ -8,7 +8,7 @@ interface DomainModel {
     defaultUser: string;
 }
 
-function addRecipientField(document: Document, recipientType: string) {
+function addRecipientField(recipientType: string) {
 
     const newIndex = document
         .querySelectorAll(`input[data-recipientType="${recipientType}"]`)
