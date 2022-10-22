@@ -24,6 +24,7 @@ public class AttachmentController : Controller
     [RequestSizeLimit(20971520)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status413PayloadTooLarge)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Upload(Guid emailPayloadId, IFormFile attachment)
     {
         if (attachment == null) // will be null when request exceeds limit
@@ -60,6 +61,7 @@ public class AttachmentController : Controller
     [HttpPost]
     [Produces("application/json")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Remove(Guid emailPayloadId, Guid attachmentId)
     {
         var result = await _attachmentStorageService
