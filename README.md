@@ -18,6 +18,10 @@ When your domain is authenticated with SendGrid, you can send emails with any ad
 
 This application is a simple .NET MVC web app that serves this purpose.
 
+### Markdown Support
+
+Once nice thing about this app that has nothing to do with the reason it was created, is that it supports Markdown for composing the email message body. Obviously the email editor isn't going to be as slick as Gmail, however for people who prefer Markdown for editing, it's a nice feature that took about no effort to add, thanks to [Markdig](https://github.com/xoofx/markdig).
+
 ## Authentication
 
 If you only care about being able to do this from your local machine, you could just pull down the source and run the app locally in Visual Studio.
