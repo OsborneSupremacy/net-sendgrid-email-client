@@ -1,26 +1,35 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+# Start from the .NET 6 SDK image
+FROM mcr.microsoft.com/dotnet/sdk:7.0
 
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
-WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+# Install node using apt-get
+RUN apt-get update && apt-get install -y nodejs
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
-WORKDIR /src
-COPY ["/src/NetSendGridEmailClient.Web/NetSendGridEmailClient.Web.csproj", "src/NetSendGridEmailClient.Web/"]
-COPY ["/src/NetSendGridEmailClient.Functions/NetSendGridEmailClient.Functions.csproj", "src/NetSendGridEmailClient.Functions/"]
-COPY ["/src/NetSendGridEmailClient.Models/NetSendGridEmailClient.Models.csproj", "src/NetSendGridEmailClient.Models/"]
-COPY ["/src/NetSendGridEmailClient.Interface/NetSendGridEmailClient.Interface.csproj", "src/NetSendGridEmailClient.Interface/"]
-COPY ["/src/NetSendGridEmailClient.Services/NetSendGridEmailClient.Services.csproj", "src/NetSendGridEmailClient.Services/"]
-RUN dotnet restore "src/NetSendGridEmailClient.Web/NetSendGridEmailClient.Web.csproj"
+# Set the working directory to the root solution folder
+WORKDIR /build
+
+# Copy the entire solution folder into the container
 COPY . .
-WORKDIR "src/NetSendGridEmailClient.Web"
-RUN dotnet build "NetSendGridEmailClient.Web.csproj" -c Release -o /app/build
 
-FROM build AS publish
-RUN dotnet publish "/src/NetSendGridEmailClient.Web.csproj" -c Release -o /app/publish /p:UseAppHost=false
+# Restore dependencies and build the projects
+RUN dotnet restore src/NetSendGridEmailClient.Interface/NetSendGridEmailClient.Interface.csproj
+RUN dotnet build src/NetSendGridEmailClient.Interface/NetSendGridEmailClient.Interface.csproj
+RUN dotnet restore src/NetSendGridEmailClient.Models/NetSendGridEmailClient.Models.csproj
+RUN dotnet build src/NetSendGridEmailClient.Models/NetSendGridEmailClient.Models.csproj
+RUN dotnet restore src/NetSendGridEmailClient.Functions/NetSendGridEmailClient.Functions.csproj
+RUN dotnet build src/NetSendGridEmailClient.Functions/NetSendGridEmailClient.Functions.csproj
+RUN dotnet restore src/NetSendGridEmailClient.Services/NetSendGridEmailClient.Services.csproj
+RUN dotnet build src/NetSendGridEmailClient.Services/NetSendGridEmailClient.Services.csproj
+RUN dotnet restore src/NetSendGridEmailClient.Web/NetSendGridEmailClient.Web.csproj
+RUN dotnet build src/NetSendGridEmailClient.Web/NetSendGridEmailClient.Web.csproj
+RUN dotnet publish src/NetSendGridEmailClient.Web/NetSendGridEmailClient.Web.csproj -c Release -o /publish
 
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
+# Remove the build folder
+RUN rm -rf /build
+
+# Set the working directory to the output directory
+WORKDIR /publish
+EXPOSE 443
+EXPOSE 80
+
+# Run the application
 ENTRYPOINT ["dotnet", "NetSendGridEmailClient.Web.dll"]
