@@ -1,13 +1,10 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy ASP.Net Core app to Azure Web App - net-sendgrid-emailclient
 
 on:
   push:
-    branches:
-      - main
-  workflow_dispatch:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
@@ -15,43 +12,28 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
-      - name: Set up .NET Core
+      - name: Set up .NET
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '7.0.x'
-          include-prerelease: true
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
+      - name: Restore dependencies
+        run: dotnet restore
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
         with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v2
-        with:
-          name: .net-app
-
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'net-sendgrid-emailclient'
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_6A550E1C7F5D42B69C6B0BDB71BACCF7 }}
-          package: .
+      - name: Build the Docker image
+        run: |
+          docker build . --file ./src/NetSendGridEmailClient.Web/Dockerfile --tag ghcr.io/osbornesupremacy/netsendgridemailclient:latest
+          docker push ghcr.io/osbornesupremacy/netsendgridemailclient:latest
