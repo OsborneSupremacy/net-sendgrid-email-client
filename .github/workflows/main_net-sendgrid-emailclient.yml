@@ -35,5 +35,5 @@ jobs:
 
       - name: Build the Docker image
         run: |
-          docker build . --file ./src/NetSendGridEmailClient.Web/Dockerfile --tag ghcr.io/osbornesupremacy/netsendgridemailclient:latest
+          docker build . --file ./Dockerfile --tag ghcr.io/osbornesupremacy/netsendgridemailclient:latest
           docker push ghcr.io/osbornesupremacy/netsendgridemailclient:latest
