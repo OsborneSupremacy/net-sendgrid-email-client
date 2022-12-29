@@ -62,7 +62,7 @@ When running the application locally, you can provide all the values stubbed out
 
 ### Azure Configuration
 
-If you're using running the application in Azure, add the settings as key/value pairs in the application configuration (App Service --> Configuration --> Application settings). Since the naming convention for those settings can be a little tricky, I've included an example in this repository.
+If you're using the application in Azure, add the settings as key/value pairs in the application configuration (App Service --> Configuration --> Application settings). Since the naming convention for those settings can be a little tricky, I've included an example in this repository.
 
 [SampleAzureConfiguration.json](SampleAzureConfiguration.json)
 
