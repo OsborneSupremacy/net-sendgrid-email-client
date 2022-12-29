@@ -75,6 +75,13 @@ If you're using the application in Azure, add the settings as key/value pairs in
 
 [SampleAzureConfiguration.json](SampleAzureConfiguration.json)
 
+#### Azure App Service
+
+You can use an Azure App Service with your configuration settings (above), and this app's image from GitHub Container Registery. Your deployment center settings should look like this:
+
+![Image](azure-appservice-container-settings.png "Azure App Service Container Settings")
+
+
 
 
 
