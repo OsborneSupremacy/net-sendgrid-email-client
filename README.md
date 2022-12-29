@@ -2,6 +2,8 @@
 
 Tool for sending emails via any address from a domain you control using SendGrid's API.
 
+![Image](demo-01.gif "Demonstration")
+
 ## The Problem
 
 You may have a registered domain, want to use multiple email addresses associated with that domain, and have them all forward to one address.
