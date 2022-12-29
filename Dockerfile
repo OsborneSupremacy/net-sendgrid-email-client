@@ -37,5 +37,7 @@ FROM base as final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
+ENV ASPNETCORE_FORWARDEDHEADERS_ENABLED=true
+
 # Run the application
 ENTRYPOINT ["dotnet", "NetSendGridEmailClient.Web.dll"]
