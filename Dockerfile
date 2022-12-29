@@ -1,4 +1,3 @@
-# Start from the .NET 6 SDK image
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 EXPOSE 80
@@ -6,7 +5,7 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 as build
 
-# Install node using apt-get
+# Install node using apt-get (needed because of TypeScript)
 RUN apt-get update && apt-get install -y nodejs
 
 # Copy the entire solution folder into the container
@@ -28,7 +27,7 @@ RUN dotnet build src/NetSendGridEmailClient.Services/NetSendGridEmailClient.Serv
 RUN dotnet restore src/NetSendGridEmailClient.Web/NetSendGridEmailClient.Web.csproj
 RUN dotnet build src/NetSendGridEmailClient.Web/NetSendGridEmailClient.Web.csproj
 
-# Public the runtime project
+# Publish the runtime project
 FROM build AS publish
 RUN dotnet publish src/NetSendGridEmailClient.Web/NetSendGridEmailClient.Web.csproj -c Release -o /app/publish
 
@@ -37,6 +36,7 @@ FROM base as final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
+# This is needed to ensure that app requests an https callback URL from Google Open ID Connect
 ENV ASPNETCORE_FORWARDEDHEADERS_ENABLED=true
 
 # Run the application
