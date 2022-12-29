@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Caching.Memory;
 using OsborneSupremacy.Extensions.Net.DependencyInjection;
 using OsborneSupremacy.Extensions.AspNet;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -43,7 +44,16 @@ builder.Services
         googleOptions.ClientId = openIdConnectSettings.ClientId;
         googleOptions.ClientSecret = openIdConnectSettings.ClientSecret;
         googleOptions.SignedOutCallbackPath = openIdConnectSettings.SignedOutCallbackPath;
+        
     });
+
+// attempt to fix redirect URL being changed from https to http
+builder.Services.Configure<ForwardedHeadersOptions>(options => {
+    options.ForwardedHeaders =
+        ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+});
 
 var authorizationSettings = builder
     .GetTypedSection<AuthorizationSettings>("Authorization");
@@ -56,11 +66,11 @@ builder.Services.AddAuthorization(options =>
 
 builder
     .Services
-    .AddSingleton
-    (
-        builder
-            .GetAndValidateTypedSection("SendGrid", new SendGridSettingsValidator())
-    );
+        .AddSingleton
+        (
+            builder
+                .GetAndValidateTypedSection("SendGrid", new SendGridSettingsValidator())
+        );
 
 var markdownPipeLine = new MarkdownPipelineBuilder()
     .UseAdvancedExtensions()

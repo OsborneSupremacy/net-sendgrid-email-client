@@ -32,11 +32,18 @@ But, of course, I only want authorized users (namely me) to be able to send emai
 
 Authentication is hard, so I'm using [Google Open ID Connect](https://developers.google.com/identity/protocols/oauth2/openid-connect) to authenticate.
 
+Use that document as a guide. I'm not going to reproduce the steps in this readme, but I'll highlight some things.
+
 ### Google Cloud Configuration
 
 You will need to create an OAuth client ID in Google Cloud, and add the client ID and secret to the app configuration.
 
 You will also need to configure an OAuth consent screen.
+
+#### Managing Existing API Credentials
+
+1. Go to [Service Management API](https://console.cloud.google.com/apis/api/servicemanagement.googleapis.com)
+2. Click the name of your project under (OAuth 2.0 Client IDs)
 
 ## Authorization
 
