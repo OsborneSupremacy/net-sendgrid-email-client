@@ -6,21 +6,21 @@ namespace NetSendGridEmailClient.Services;
 [RegistrationTarget(typeof(IMemoryCacheFacade))]
 public class MemoryCacheFacade : IMemoryCacheFacade
 {
-    private readonly ILogger<AttachmentStorageService> _logger;
+    private readonly ILogger<MemoryCacheFacade> _logger;
 
     private readonly IMemoryCache _memoryCache;
 
-    public MemoryCacheFacade(ILogger<AttachmentStorageService> logger, IMemoryCache memoryCache)
+    public MemoryCacheFacade(ILogger<MemoryCacheFacade> logger, IMemoryCache memoryCache)
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
     }
 
-    public (bool result, T? value) EntryExists<T>(Guid key)
+    public IOutcome<T> GetEntry<T>(Guid key)
     {
-        return !_memoryCache.TryGetValue(key, out T value)
-            ? (false, default(T))
-            : (true, value);
+        if (_memoryCache.TryGetValue(key, out T? value))
+            return new Outcome<T>(value!);
+        return new Outcome<T>(new KeyNotFoundException($"{key} not found in memory cache."));
     }
 
     public TItem GetOrCreate<TItem>(Guid key, MemoryCacheEntryOptions options) where TItem : new()

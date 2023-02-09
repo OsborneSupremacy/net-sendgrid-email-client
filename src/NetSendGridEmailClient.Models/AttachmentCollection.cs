@@ -13,7 +13,7 @@ public class AttachmentCollection : IAttachmentCollection
         _attachmentDictionary = new();
     }
 
-    public Result<bool> Add(IAttachment attachment)
+    public Outcome<bool> Add(IAttachment attachment)
     {
         var currentSize = _attachmentDictionary
             .Values
@@ -22,10 +22,11 @@ public class AttachmentCollection : IAttachmentCollection
         var newSize = (currentSize + attachment.Base64Content.Length) * Base64toBytesFactor;
 
         if (newSize > MaxAggregateAttachmentSize)
-            return new Result<bool>(new NotSupportedException($"Total file size of attachment would exceed maximum of {newSize} bytes"));
+            return new Outcome<bool>(new NotSupportedException($"Total file size of attachment would exceed maximum of {newSize} bytes"));
 
         _attachmentDictionary.Add(attachment.AttachmentId, attachment);
-        return true;
+
+        return new Outcome<bool>(true);
     }
 
     public IList<IAttachment> GetAll() =>

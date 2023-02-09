@@ -13,8 +13,8 @@ public class EmailIdempotentServiceTests : TestBase
         var emailPayload = Fixture.Create<EmailPayload>();
 
         Fixture.Freeze<Mock<IMemoryCacheFacade>>()
-            .Setup(x => x.EntryExists<DateTime>(emailPayload.EmailPayloadId))
-            .Returns((true, DateTime.Now));
+            .Setup(x => x.GetEntry<DateTime>(emailPayload.EmailPayloadId))
+            .Returns(new Outcome<DateTime>(DateTime.Now));
 
         var emailService = Fixture.Freeze<Mock<ISendGridEmailService>>();
 
@@ -23,20 +23,8 @@ public class EmailIdempotentServiceTests : TestBase
         // act
         var result = await sut.SendAsync(emailPayload);
 
-        var success = result.Match
-        (
-            success =>
-            {
-                return true;
-            },
-            error =>
-            {
-                return false;
-            }
-        );
-
         // assert
-        success.Should().BeFalse();
+        result.IsFaulted.Should().BeTrue();
         emailService.Verify(x => x.SendAsync(It.IsAny<IEmailPayload>()), Times.Never());
     }
 
@@ -49,8 +37,8 @@ public class EmailIdempotentServiceTests : TestBase
         var memoryCacheFacade = Fixture.Freeze<Mock<IMemoryCacheFacade>>();
 
         memoryCacheFacade
-            .Setup(x => x.EntryExists<DateTime>(emailPayload.EmailPayloadId))
-            .Returns((false, default(DateTime)));
+            .Setup(x => x.GetEntry<DateTime>(emailPayload.EmailPayloadId))
+            .Returns(new Outcome<DateTime>(new KeyNotFoundException()));
 
         var emailService = Fixture.Freeze<Mock<ISendGridEmailService>>();
 
@@ -59,20 +47,8 @@ public class EmailIdempotentServiceTests : TestBase
         // act
         var result = await sut.SendAsync(emailPayload);
 
-        var success = result.Match
-        (
-            success =>
-            {
-                return true;
-            },
-            error =>
-            {
-                return false;
-            }
-        );
-
         // assert
-        success.Should().BeTrue();
+        result.IsSuccess.Should().BeTrue();
         emailService.Verify(x => x.SendAsync(emailPayload), Times.Once());
         memoryCacheFacade
             .Verify(x =>
@@ -80,5 +56,4 @@ public class EmailIdempotentServiceTests : TestBase
                 Times.Once
             );
     }
-
 }

@@ -23,9 +23,9 @@ public class SendGridEmailService : IEmailService, ISendGridEmailService
         _emailStagingService = emailStagingService ?? throw new ArgumentNullException(nameof(emailStagingService));
     }
 
-    public async Task<Result<bool>> SendAsync(IEmailPayload emailPayload)
+    public async Task<Outcome<bool>> SendAsync(IEmailPayload emailPayload)
     {
-        SendGridMessage msg = await _emailStagingService.StageAsync(emailPayload);
+        var msg = await _emailStagingService.StageAsync(emailPayload);
 
         var domain = _settings
             .Domains
@@ -38,15 +38,15 @@ public class SendGridEmailService : IEmailService, ISendGridEmailService
                 .SendEmailAsync(msg);
 
             if (!response.IsSuccessStatusCode)
-                return new Result<bool>(new RequestErrorException(await response.Body.ReadAsStringAsync()));
+                return new Outcome<bool>(new RequestErrorException(await response.Body.ReadAsStringAsync()));
 
             await _attachmentStorageService
                 .RemoveAllAsync(emailPayload.EmailPayloadId);
 
-            return true;
+            return new Outcome<bool>(true);
         } catch (Exception ex)
         {
-            return new Result<bool>(ex);
+            return new Outcome<bool>(ex);
         }
     }
 }

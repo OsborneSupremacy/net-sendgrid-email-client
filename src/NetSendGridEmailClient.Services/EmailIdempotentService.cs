@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace NetSendGridEmailClient.Services;
+﻿namespace NetSendGridEmailClient.Services;
 
 [ServiceLifetime(ServiceLifetime.Singleton)]
 [RegistrationTarget(typeof(IEmailService))]
@@ -22,32 +20,25 @@ public class EmailIdempotentService : IEmailService
         _emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
     }
 
-    public async Task<Result<bool>> SendAsync(IEmailPayload emailPayload)
+    public async Task<Outcome<bool>> SendAsync(IEmailPayload emailPayload)
     {
-        var (emailSent, emailSentTime) = _memoryCacheFacade
-            .EntryExists<DateTime>(emailPayload.EmailPayloadId);
+        var cacheOutcome = _memoryCacheFacade
+            .GetEntry<DateTime>(emailPayload.EmailPayloadId);
 
-        if (emailSent)
-            return new Result<bool>(
-                new NotSupportedException($"This email was already sent, at {emailSentTime}. It will not be sent again."));
+        if (cacheOutcome.IsSuccess)
+            return new Outcome<bool>(
+                new NotSupportedException($"This email was already sent, at {cacheOutcome.Value}. It will not be sent again."));
 
         var result = await _emailService.SendAsync(emailPayload);
 
-        return result.Match
-        (
-            success =>
-            {
-                _memoryCacheFacade
-                  .Set(emailPayload.EmailPayloadId, DateTime.Now, new()
-                  {
-                      SlidingExpiration = TimeSpan.FromHours(2)
-                  });
-                return true;
-            },
-            error =>
-            {
-                return new Result<bool>(error);
-            }
-        );
+        if(result.IsFaulted)
+            return new Outcome<bool>(result.Exception);
+
+        _memoryCacheFacade.Set(emailPayload.EmailPayloadId, DateTime.Now, new()
+        {
+            SlidingExpiration = TimeSpan.FromHours(2)
+        });
+
+        return new Outcome<bool>(true);
     }
 }

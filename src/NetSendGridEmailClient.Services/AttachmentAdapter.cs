@@ -4,24 +4,39 @@
 [RegistrationTarget(typeof(IAttachmentAdapter))]
 public class AttachmentAdapter : IAttachmentAdapter
 {
-    public Task AddAsync(SendGridMessage msg, IAttachment attachment)
+    public async Task<Outcome<bool>> AddAsync(SendGridMessage msg, IAttachment attachment)
     {
-        using var contentStream =
-            new MemoryStream(Convert.FromBase64String(attachment.Base64Content));
+        try
+        {
+            using var contentStream =
+                new MemoryStream(Convert.FromBase64String(attachment.Base64Content));
 
-        return msg.AddAttachmentAsync(
-            attachment.FileName,
-            contentStream,
-            attachment.Type,
-            "attachment",
-            null,
-            CancellationToken.None
-            );
+            await msg.AddAttachmentAsync(
+                attachment.FileName,
+                contentStream,
+                attachment.Type,
+                "attachment",
+                null,
+                CancellationToken.None
+                );
+
+            return new Outcome<bool>(true);
+        } catch (Exception ex)
+        {
+            return new Outcome<bool>(ex);
+        }
     }
 
-    public async Task AddAsync(SendGridMessage msg, IList<IAttachment> attachments)
+    public async Task<Outcome<bool>> AddAsync(SendGridMessage msg, IList<IAttachment> attachments)
     {
-        foreach (var attachment in attachments)
-            await AddAsync(msg, attachment);
+        try
+        {
+            foreach (var attachment in attachments)
+                await AddAsync(msg, attachment);
+            return new Outcome<bool>(true);
+        } catch (Exception ex)
+        {
+            return new Outcome<bool>(ex);
+        }
     }
 }

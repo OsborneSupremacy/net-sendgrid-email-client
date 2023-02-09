@@ -48,20 +48,8 @@ public class AttachmentStorageServiceTests : TestBase
         // act
         var result = await sut.SaveAttachmentAsync(emailPayloadId, attachment);
 
-        // asssert
-        var success = result.Match
-        (
-            success =>
-            {
-                return true;
-            },
-            error =>
-            {
-                return false;
-            }
-        );
-
-        success.Should().BeTrue();
+        // assert
+        result.IsSuccess.Should().BeTrue();
         attachmentCollection.GetAll().Contains(attachment);
         attachmentCollection.GetAll().Should().NotContain(notAddedAttachment);
     }

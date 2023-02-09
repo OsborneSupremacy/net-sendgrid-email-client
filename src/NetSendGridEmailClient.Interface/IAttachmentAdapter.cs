@@ -4,7 +4,7 @@ namespace NetSendGridEmailClient.Interface;
 
 public interface IAttachmentAdapter
 {
-    public Task AddAsync(SendGridMessage msg, IList<IAttachment> attachments);
+    public Task<Outcome<bool>> AddAsync(SendGridMessage msg, IList<IAttachment> attachments);
 
-    public Task AddAsync(SendGridMessage msg, IAttachment attachment);
+    public Task<Outcome<bool>> AddAsync(SendGridMessage msg, IAttachment attachment);
 }

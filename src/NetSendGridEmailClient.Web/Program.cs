@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Caching.Memory;
 using OsborneSupremacy.Extensions.Net.DependencyInjection;
 using OsborneSupremacy.Extensions.AspNet;
-using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;

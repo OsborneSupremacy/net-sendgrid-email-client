@@ -8,7 +8,7 @@ public interface IMemoryCacheFacade
 
     public void Set<T>(Guid key, T value, MemoryCacheEntryOptions options);
 
-    public (bool result, T? value) EntryExists<T>(Guid key);
+    IOutcome<T> GetEntry<T>(Guid key);
 
     public void Remove(Guid key);
 }

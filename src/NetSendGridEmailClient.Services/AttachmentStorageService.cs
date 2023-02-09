@@ -27,23 +27,23 @@ public class AttachmentStorageService : IAttachmentStorageService
     public Task<IAttachmentCollection> GetAttachmentCollectionAsync(Guid emailPayloadId) =>
         Task.FromResult(GetAttachmentCollection(emailPayloadId));
 
-    public Task<Result<bool>> SaveAttachmentAsync(Guid emailPayloadId, IAttachment attachment)
+    public Task<Outcome<bool>> SaveAttachmentAsync(Guid emailPayloadId, IAttachment attachment)
     {
         var attachmentCollection = GetAttachmentCollection(emailPayloadId);
         attachmentCollection.Add(attachment);
-        return Task.FromResult(new Result<bool>(true));
+        return Task.FromResult(new Outcome<bool>(true));
     }
 
-    public Task<Result<bool>> RemoveAttachmentAsync(Guid emailPayloadId, Guid attachmentId)
+    public Task<Outcome<bool>> RemoveAttachmentAsync(Guid emailPayloadId, Guid attachmentId)
     {
         var attachmentCollection = GetAttachmentCollection(emailPayloadId);
         attachmentCollection.Remove(attachmentId);
-        return Task.FromResult(new Result<bool>(true));
+        return Task.FromResult(new Outcome<bool>(true));
     }
 
-    public Task<Result<bool>> RemoveAllAsync(Guid emailPayloadId)
+    public Task<Outcome<bool>> RemoveAllAsync(Guid emailPayloadId)
     {
         _memoryCacheFacade.Remove(emailPayloadId);
-        return Task.FromResult(new Result<bool>(true));
+        return Task.FromResult(new Outcome<bool>(true));
     }
 }

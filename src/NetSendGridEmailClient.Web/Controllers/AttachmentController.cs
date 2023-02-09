@@ -44,18 +44,13 @@ public class AttachmentController : Controller
         var result = await _attachmentStorageService
             .SaveAttachmentAsync(emailPayloadId, storedAttachment);
 
-        return result.Match
-        (
-            success =>
-            {
-                return new OkObjectResult(true);
-            },
-            error =>
-            {
-                _logger.LogError(error.ToString());
-                return StatusCode(StatusCodes.Status500InternalServerError, "Something went wrong");
-            }
-        );
+        if(result.IsFaulted)
+        {
+            _logger.LogError(result.Exception, "Error uploading attachment");
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
+
+        return new OkObjectResult(true);
     }
 
     [HttpPost]
@@ -67,18 +62,13 @@ public class AttachmentController : Controller
         var result = await _attachmentStorageService
             .RemoveAttachmentAsync(emailPayloadId, attachmentId);
 
-        return result.Match
-        (
-            success =>
-            {
-                return new OkResult();
-            },
-            error =>
-            {
-                _logger.LogError(error.ToString());
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        );
+        if (result.IsFaulted)
+        {
+            _logger.LogError(result.Exception, "Error removing attachment");
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
+
+        return new OkResult();
     }
 
     [HttpGet]

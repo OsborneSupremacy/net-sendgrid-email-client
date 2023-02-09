@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using NetSendGridEmailClient.Interface;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace NetSendGridEmailClient.Web.Controllers;
 
@@ -83,17 +84,12 @@ public class EmailController : Controller
 
         var result = await _emailService.SendAsync(model);
 
-        return result.Match
-        (
-            success =>
-            {
-                return View("Sent");
-            },
-            error =>
-            {
-                ModelState.AddModelError("SendGrid", error.Message.ToString());
-                return SendToEditor(model);
-            }
-        );
+        if(result.IsFaulted)
+        {
+            ModelState.AddModelError("SendGrid", result.Exception.Message.ToString());
+            return SendToEditor(model);
+        }
+
+        return View("Sent");
     }
 }
