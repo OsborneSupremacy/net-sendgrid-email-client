@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using NetSendGridEmailClient.Interface;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace NetSendGridEmailClient.Web.Controllers;
 

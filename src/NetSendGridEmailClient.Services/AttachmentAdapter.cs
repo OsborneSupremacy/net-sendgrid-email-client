@@ -20,7 +20,7 @@ public class AttachmentAdapter : IAttachmentAdapter
                 CancellationToken.None
                 );
 
-            return new Outcome<bool>(true);
+            return true;
         } catch (Exception ex)
         {
             return new Outcome<bool>(ex);
@@ -33,7 +33,7 @@ public class AttachmentAdapter : IAttachmentAdapter
         {
             foreach (var attachment in attachments)
                 await AddAsync(msg, attachment);
-            return new Outcome<bool>(true);
+            return true;
         } catch (Exception ex)
         {
             return new Outcome<bool>(ex);

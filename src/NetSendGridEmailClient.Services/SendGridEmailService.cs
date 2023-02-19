@@ -43,7 +43,7 @@ public class SendGridEmailService : IEmailService, ISendGridEmailService
             await _attachmentStorageService
                 .RemoveAllAsync(emailPayload.EmailPayloadId);
 
-            return new Outcome<bool>(true);
+            return true;
         } catch (Exception ex)
         {
             return new Outcome<bool>(ex);

@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
-using NetSendGridEmailClient.Functions;
 
 namespace NetSendGridEmailClient.Services.Tests;
 
@@ -14,7 +13,7 @@ public class EmailIdempotentServiceTests : TestBase
 
         Fixture.Freeze<Mock<IMemoryCacheFacade>>()
             .Setup(x => x.GetEntry<DateTime>(emailPayload.EmailPayloadId))
-            .Returns(new Outcome<DateTime>(DateTime.Now));
+            .Returns(DateTime.Now);
 
         var emailService = Fixture.Freeze<Mock<ISendGridEmailService>>();
 

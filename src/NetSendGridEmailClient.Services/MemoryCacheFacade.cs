@@ -16,10 +16,10 @@ public class MemoryCacheFacade : IMemoryCacheFacade
         _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
     }
 
-    public IOutcome<T> GetEntry<T>(Guid key)
+    public Outcome<T> GetEntry<T>(Guid key)
     {
         if (_memoryCache.TryGetValue(key, out T? value))
-            return new Outcome<T>(value!);
+            return value!;
         return new Outcome<T>(new KeyNotFoundException($"{key} not found in memory cache."));
     }
 

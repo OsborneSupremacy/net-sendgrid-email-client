@@ -26,7 +26,7 @@ public class AttachmentCollection : IAttachmentCollection
 
         _attachmentDictionary.Add(attachment.AttachmentId, attachment);
 
-        return new Outcome<bool>(true);
+        return true;
     }
 
     public IList<IAttachment> GetAll() =>

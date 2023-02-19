@@ -39,6 +39,6 @@ public class EmailIdempotentService : IEmailService
             SlidingExpiration = TimeSpan.FromHours(2)
         });
 
-        return new Outcome<bool>(true);
+        return true;
     }
 }

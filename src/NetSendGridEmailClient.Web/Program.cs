@@ -3,7 +3,6 @@ using Markdig;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Caching.Memory;
 using OsborneSupremacy.Extensions.Net.DependencyInjection;
-using OsborneSupremacy.Extensions.AspNet;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;

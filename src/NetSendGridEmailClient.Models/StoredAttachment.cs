@@ -1,6 +1,4 @@
-﻿using NetSendGridEmailClient.Interface;
-
-namespace NetSendGridEmailClient.Models;
+﻿namespace NetSendGridEmailClient.Models;
 
 public record StoredAttachment : IAttachment
 {
